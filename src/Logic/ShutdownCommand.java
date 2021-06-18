@@ -18,34 +18,6 @@ public class ShutdownCommand extends Command {
         this.servers = new ArrayList<>(servers);
     }
 
-//    public void execute() {
-//        Task task = new Task<Void>() {
-//            @Override protected Void call() throws Exception {
-//                try (PowerShell powerShell = PowerShell.openSession()) {
-//                    Map<String, String> myConfig = new HashMap<>();
-//                    myConfig.put("maxWait", "30000");
-//                    servers.forEach(server -> {
-//                            //                if (!server.getIsOnline()) {
-//                            //                    System.out.println("Not online");
-//                            //                    return;
-//                            //                }
-//                        powerShell.executeCommand("$serverIP='" + server.getIpAddress() + "'");
-//                        powerShell.executeCommand("$userName='" + server.getUserName() + "'");
-//                        powerShell.executeCommand("$password='" + server.getPassword() + "'");
-//                        powerShell.executeCommand("[securestring]$securePassword = ConvertTo-SecureString $password -AsPlainText -Force");
-//                        powerShell.executeCommand("$creds = New-Object System.Management.Automation.PSCredential ($userName, $securePassword)");
-//                        PowerShellResponse response = powerShell.configuration(myConfig).executeCommand("Stop-Computer -ComputerName $serverIP -Credential $creds -Force");
-//                        System.out.println(response.getCommandOutput());
-//                    });
-//                } catch (PowerShellNotAvailableException ex) {
-//                    System.out.println(ex.getMessage());
-//                }
-//                return null;
-//            }
-//        };
-//        new Thread(task).start();
-//    }
-
     public void execute() {
         for (Server server : servers) {
             Task task = new Task<Void>() {
@@ -61,14 +33,13 @@ public class ShutdownCommand extends Command {
     private void powerShellExec(Server server) {
         try (PowerShell powerShell = PowerShell.openSession()) {
             Map<String, String> myConfig = new HashMap<>();
-            myConfig.put("maxWait", "30000");
+            myConfig.put("maxWait", "90000");
             powerShell.executeCommand("$serverIP='" + server.getIpAddress() + "'");
             powerShell.executeCommand("$userName='" + server.getUserName() + "'");
             powerShell.executeCommand("$password='" + server.getPassword() + "'");
             powerShell.executeCommand("[securestring]$securePassword = ConvertTo-SecureString $password -AsPlainText -Force");
             powerShell.executeCommand("$creds = New-Object System.Management.Automation.PSCredential ($userName, $securePassword)");
             PowerShellResponse response = powerShell.configuration(myConfig).executeCommand("Stop-Computer -ComputerName $serverIP -Credential $creds -Force");
-            System.out.println(response.getCommandOutput());
         } catch (PowerShellNotAvailableException ex) {
             System.out.println(ex.getMessage());
         }

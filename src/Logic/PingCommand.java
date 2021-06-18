@@ -16,6 +16,15 @@ public class PingCommand extends Command {
         this.serverIndices = new ArrayList<>(serverIndices);
     }
 
+    public PingCommand(App app) {
+        this.app = app;
+        this.serverIndices = new ArrayList<>();
+        for (int i = 0; i < app.getServers().size(); i++) {
+            serverIndices.add(i);
+        }
+    }
+
+
     @Override
     public void execute() {
         List<Server> servers = app.getServers();
@@ -23,7 +32,7 @@ public class PingCommand extends Command {
             Server serverToCheck = servers.get(serverIndex);
             boolean isOnline = false;
             try {
-                isOnline = InetAddress.getByName(serverToCheck.getIpAddress()).isReachable(1000);
+                isOnline = InetAddress.getByName(serverToCheck.getIpAddress()).isReachable(500);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
