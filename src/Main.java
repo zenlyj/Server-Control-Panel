@@ -1,29 +1,54 @@
 import Logic.PingCommand;
+import Logic.SchedulePingCommand;
 import Model.App;
+import Model.Server;
 import UI.MainPage;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.concurrent.ScheduledService;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main extends Application{
 
-    private void setPingSchedule(App app) {
-        Timeline pingCycle = new Timeline(
-                new KeyFrame(Duration.minutes(1),
-                        new EventHandler<ActionEvent>() {
-                            @Override
-                            public void handle(ActionEvent event) {
-                                PingCommand pingCommand = new PingCommand(app);
-                                pingCommand.execute();
+    private void setSchedule(App app) {
+        // deep copy of server list
+        List<Server> servers = new ArrayList<>();
+        for (Server server : app.getServers()) {
+            servers.add(new Server(server));
+        }
+
+        ScheduledService<Void> service = new ScheduledService<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        SchedulePingCommand spCommand = new SchedulePingCommand(servers);
+                        spCommand.execute();
+                        // update status of servers
+                        Platform.runLater(() -> {
+                            for (int i = 0; i < servers.size(); i++) {
+                                app.getServers().set(i, servers.get(i));
                             }
-                        }));
-        pingCycle.setCycleCount(Timeline.INDEFINITE);
-        pingCycle.play();
+                        });
+                        return null;
+                    }
+                };
+            }
+        };
+        service.setPeriod(Duration.seconds(10));
+        service.start();
     }
 
 
@@ -35,7 +60,7 @@ public class Main extends Application{
         Scene primaryScene = mainPage.getMainPage(app);
         primaryStage.setScene(primaryScene);
         primaryStage.show();
-        setPingSchedule(app);
+        setSchedule(app);
     }
 
     public static void main(String[] args) {

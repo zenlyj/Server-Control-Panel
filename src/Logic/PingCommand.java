@@ -16,15 +16,6 @@ public class PingCommand extends Command {
         this.serverIndices = new ArrayList<>(serverIndices);
     }
 
-    public PingCommand(App app) {
-        this.app = app;
-        this.serverIndices = new ArrayList<>();
-        for (int i = 0; i < app.getServers().size(); i++) {
-            serverIndices.add(i);
-        }
-    }
-
-
     @Override
     public void execute() {
         List<Server> servers = app.getServers();
