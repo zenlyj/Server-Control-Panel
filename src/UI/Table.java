@@ -3,11 +3,13 @@ package UI;
 import Model.App;
 import Model.Server;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Table {
@@ -35,10 +37,14 @@ public class Table {
     }
 
     private void setTableData(List<Server> servers) {
+        List<Integer> selectedIndices = new ArrayList<>(tableView.getSelectionModel().getSelectedIndices());
         tableView.getItems().clear();
         servers.forEach(server -> {
             tableView.getItems().add(server);
         });
+        for (Integer i : selectedIndices) {
+            tableView.getSelectionModel().select(i.intValue());
+        }
     }
 
     public TableView getTable() {

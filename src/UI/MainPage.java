@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 
 public class MainPage {
+
     public GridPane createGridPane() {
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER_LEFT);
