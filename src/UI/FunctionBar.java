@@ -5,6 +5,7 @@ import Logic.PingCommand;
 import Logic.ShutdownCommand;
 import Model.App;
 import Model.Server;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -52,6 +53,24 @@ public class FunctionBar {
         toolBar.getItems().add(deleteButton);
     }
 
+    private void setEditServerBtn() {
+        Button editButton = new Button("Edit");
+        editButton.setOnAction((ActionEvent actionEvent) -> {
+            int selectedIdx = tableView.getSelectionModel().getSelectedIndex();
+            Stage stage = new Stage();
+            stage.setScene(EditForm.getForm(app, selectedIdx));
+            stage.show();
+        });
+        tableView.getSelectionModel().getSelectedItems().addListener((ListChangeListener) change -> {
+            if (tableView.getSelectionModel().getSelectedItems().size() > 1) {
+                editButton.setVisible(false);
+            } else {
+                editButton.setVisible(true);
+            }
+        });
+        toolBar.getItems().add(editButton);
+    }
+
     private void setShutdownBtn() {
         Button shutdownButton = new Button("Shutdown");
         shutdownButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -83,6 +102,7 @@ public class FunctionBar {
         setDeleteServerBtn();
         setPingBtn();
         setShutdownBtn();
+        setEditServerBtn();
         HBox hbox = new HBox(toolBar);
         return hbox;
     }
