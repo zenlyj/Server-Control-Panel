@@ -23,7 +23,7 @@ public class PingCommand extends Command {
             Server serverToCheck = servers.get(serverIndex);
             boolean isOnline = false;
             try {
-                isOnline = InetAddress.getByName(serverToCheck.getIpAddress()).isReachable(500);
+                isOnline = InetAddress.getByName(serverToCheck.getIpAddress()).isReachable(800);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
