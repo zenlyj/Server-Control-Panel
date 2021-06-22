@@ -28,11 +28,7 @@ public class PingCommand extends Command {
                 System.out.println(e.getMessage());
             }
             Server updatedServer = new Server(serverToCheck);
-            if (isOnline) {
-                updatedServer.setStatus(true);
-            } else {
-                updatedServer.setStatus(false);
-            }
+            updatedServer.setStatus(isOnline);
             servers.set(serverIndex, updatedServer);
         }
     }

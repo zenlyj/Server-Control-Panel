@@ -17,7 +17,7 @@ public class SchedulePingCommand extends Command {
         for (Server server : servers) {
             boolean isOnline = false;
             try {
-                isOnline = InetAddress.getByName(server.getIpAddress()).isReachable(800);
+                isOnline = InetAddress.getByName(server.getIpAddress()).isReachable(300);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
