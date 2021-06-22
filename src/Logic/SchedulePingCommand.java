@@ -17,15 +17,11 @@ public class SchedulePingCommand extends Command {
         for (Server server : servers) {
             boolean isOnline = false;
             try {
-                isOnline = InetAddress.getByName(server.getIpAddress()).isReachable(500);
+                isOnline = InetAddress.getByName(server.getIpAddress()).isReachable(800);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
-            if (isOnline) {
-                server.setStatus(true);
-            } else {
-                server.setStatus(false);
-            }
+            server.setStatus(isOnline);
         }
     }
 }

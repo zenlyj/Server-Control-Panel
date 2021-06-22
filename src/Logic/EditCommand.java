@@ -8,15 +8,15 @@ import java.util.List;
 
 public class EditCommand extends Command {
     private App app;
-    private int selectedIdx;
+    private int selectedIndex;
     private String userName;
     private String password;
     private String serverName;
     private String ipAddress;
 
-    public EditCommand(App app, int selectedIdx, String userName, String password, String serverName, String ipAddress) {
+    public EditCommand(App app, int selectedIndex, String userName, String password, String serverName, String ipAddress) {
         this.app = app;
-        this.selectedIdx = selectedIdx;
+        this.selectedIndex = selectedIndex;
         this.userName = userName;
         this.password = password;
         this.serverName = serverName;
@@ -25,15 +25,15 @@ public class EditCommand extends Command {
 
     @Override
     public void execute() {
-        app.setServerInEdit(selectedIdx);
+        app.setServerInEdit(selectedIndex);
         List<Server> servers = app.getServers();
         Server updatedServer = new Server(ipAddress, serverName, userName, password);
-        servers.set(selectedIdx, updatedServer);
+        servers.set(selectedIndex, updatedServer);
         app.commit(servers);
         Task<Void> task = new Task<Void>() {
             @Override protected Void call() throws Exception {
                 Thread.sleep(10000);
-                app.setServerInEdit(-1);
+                app.removeServerInEdit(selectedIndex);
                 return null;
             }
         };

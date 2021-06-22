@@ -34,8 +34,9 @@ public class Main extends Application{
                         // update status of servers
                         Platform.runLater(() -> {
                             for (int i = 0; i < servers.size(); i++) {
-                                if (i == app.getServerInEdit()) continue;
-                                app.getServers().set(i, servers.get(i));
+                                if (!app.isServerInEdit(i)) {
+                                    app.getServers().set(i, servers.get(i));
+                                }
                             }
                         });
                         return null;
