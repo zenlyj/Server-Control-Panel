@@ -4,10 +4,6 @@ import Model.App;
 import Model.Server;
 import javafx.collections.ObservableList;
 
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 public class AddCommand extends Command {
     private App app;
     private String userName;

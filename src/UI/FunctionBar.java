@@ -6,8 +6,6 @@ import Logic.ShutdownCommand;
 import Model.App;
 import Model.Server;
 import javafx.collections.ListChangeListener;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToolBar;
@@ -29,33 +27,27 @@ public class FunctionBar {
 
     private void setAddServerBtn() {
         Button addButton = new Button("Add");
-        addButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                Stage stage = new Stage();
-                stage.setScene(AddForm.getForm(app));
-                stage.show();
-            }
+        addButton.setOnAction(actionEvent -> {
+            Stage stage = new Stage();
+            stage.setScene(AddForm.getForm(app));
+            stage.show();
         });
         toolBar.getItems().add(addButton);
     }
 
     private void setDeleteServerBtn() {
         Button deleteButton = new Button("Delete");
-        deleteButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                List<Server> serversToDelete = tableView.getSelectionModel().getSelectedItems();
-                DeleteCommand deleteCommand = new DeleteCommand(app, serversToDelete);
-                deleteCommand.execute();
-            }
+        deleteButton.setOnAction(actionEvent -> {
+            List<Server> serversToDelete = tableView.getSelectionModel().getSelectedItems();
+            DeleteCommand deleteCommand = new DeleteCommand(app, serversToDelete);
+            deleteCommand.execute();
         });
         toolBar.getItems().add(deleteButton);
     }
 
     private void setEditServerBtn() {
         Button editButton = new Button("Edit");
-        editButton.setOnAction((ActionEvent actionEvent) -> {
+        editButton.setOnAction(actionEvent -> {
             int selectedIdx = tableView.getSelectionModel().getSelectedIndex();
             Stage stage = new Stage();
             stage.setScene(EditForm.getForm(app, selectedIdx));
@@ -73,26 +65,20 @@ public class FunctionBar {
 
     private void setShutdownBtn() {
         Button shutdownButton = new Button("Shutdown");
-        shutdownButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                List<Server> serversToShutdown = (List<Server>) tableView.getSelectionModel().getSelectedItems();
-                ShutdownCommand shutdownCommand = new ShutdownCommand(serversToShutdown);
-                shutdownCommand.execute();
-            }
+        shutdownButton.setOnAction(actionEvent -> {
+            List<Server> serversToShutdown = (List<Server>) tableView.getSelectionModel().getSelectedItems();
+            ShutdownCommand shutdownCommand = new ShutdownCommand(serversToShutdown);
+            shutdownCommand.execute();
         });
         toolBar.getItems().add(shutdownButton);
     }
 
     private void setPingBtn() {
         Button pingButton = new Button("Ping");
-        pingButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                List<Integer> serverIndices = tableView.getSelectionModel().getSelectedIndices();
-                PingCommand pingCommand = new PingCommand(app, serverIndices);
-                pingCommand.execute();
-            }
+        pingButton.setOnAction(actionEvent -> {
+            List<Integer> serverIndices = tableView.getSelectionModel().getSelectedIndices();
+            PingCommand pingCommand = new PingCommand(app, serverIndices);
+            pingCommand.execute();
         });
         toolBar.getItems().add(pingButton);
     }

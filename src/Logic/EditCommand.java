@@ -2,7 +2,6 @@ package Logic;
 
 import Model.App;
 import Model.Server;
-import javafx.concurrent.Task;
 
 import java.util.List;
 
@@ -30,13 +29,5 @@ public class EditCommand extends Command {
         Server updatedServer = new Server(ipAddress, serverName, userName, password);
         servers.set(selectedIndex, updatedServer);
         app.commit(servers);
-        Task<Void> task = new Task<Void>() {
-            @Override protected Void call() throws Exception {
-                Thread.sleep(10000);
-                app.removeServerInEdit(selectedIndex);
-                return null;
-            }
-        };
-        new Thread(task).start();
     }
 }

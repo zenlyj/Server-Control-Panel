@@ -66,6 +66,23 @@ public class Server {
     }
 
     @Override
+    public boolean equals(Object compared) {
+        if (compared == this) {
+            return true;
+        }
+        if (!(compared instanceof Server)) {
+            return false;
+        }
+        Server cmpServer = (Server) compared;
+        String cmpIP = cmpServer.getIpAddress();
+        if (cmpIP.equals(this.getIpAddress())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     public String toString() {
         return serverName;
     }
