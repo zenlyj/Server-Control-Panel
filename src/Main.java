@@ -40,9 +40,11 @@ public class Main extends Application{
                                 boolean isEdited = app.isServerInEdit(i);
                                 boolean isDeleted = app.isServerInDelete(curr);
                                 if (isEdited) {
+                                    // release edited server
                                     app.removeServerInEdit(i);
                                 }
                                 if (isDeleted) {
+                                    // release deleted server
                                     app.removeServerInDelete(curr);
                                     continue;
                                 }

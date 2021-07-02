@@ -75,11 +75,8 @@ public class Server {
         }
         Server cmpServer = (Server) compared;
         String cmpIP = cmpServer.getIpAddress();
-        if (cmpIP.equals(this.getIpAddress())) {
-            return true;
-        } else {
-            return false;
-        }
+        String cmpName = cmpServer.getServerName();
+        return (cmpIP.equals(this.getIpAddress()) || cmpName.equals(this.getServerName()));
     }
 
     @Override

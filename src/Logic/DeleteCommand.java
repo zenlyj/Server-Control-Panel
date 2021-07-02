@@ -3,7 +3,6 @@ package Logic;
 import Model.App;
 import Model.Server;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +21,8 @@ public class DeleteCommand extends Command {
         for (Server server : serversToDelete) {
             app.setServerInDelete(server);
             servers.remove(server);
+            String successMessage = server.getServerName() + " has been successfully deleted\n";
+            app.addHistory(successMessage);
         }
         app.commit(servers);
     }

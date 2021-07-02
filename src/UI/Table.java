@@ -27,12 +27,7 @@ public class Table {
         tableView.getColumns().add(column1);
         tableView.getColumns().add(column2);
         setTableData(app.getServers());
-        app.getServers().addListener(new ListChangeListener() {
-            @Override
-            public void onChanged(ListChangeListener.Change change) {
-                setTableData(app.getServers());
-            }
-        });
+        app.getServers().addListener((ListChangeListener) change -> setTableData(app.getServers()));
     }
 
     private void setTableData(List<Server> servers) {

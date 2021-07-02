@@ -27,9 +27,11 @@ public class PingCommand extends Command {
             try {
                 isOnline = InetAddress.getByName(serverToCheck.getIpAddress()).isReachable(300);
             } catch (UnknownHostException e) {
-                System.out.println("The following host is unknown: " + serverToCheck.getServerName());
+                String unknownHostMessage = "The following host is unknown: " + serverToCheck.getServerName();
+                app.addHistory(unknownHostMessage);
             } catch (IOException e) {
-                System.out.println("A network error has occurred!");
+                String networkErrorMessage = "Unable to establish network connection to " + serverToCheck.getServerName();
+                app.addHistory(networkErrorMessage);
             } catch (IllegalArgumentException e) {
                 // Will never have a negative timeout
             }

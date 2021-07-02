@@ -67,7 +67,7 @@ public class FunctionBar {
         Button shutdownButton = new Button("Shutdown");
         shutdownButton.setOnAction(actionEvent -> {
             List<Server> serversToShutdown = (List<Server>) tableView.getSelectionModel().getSelectedItems();
-            ShutdownCommand shutdownCommand = new ShutdownCommand(serversToShutdown);
+            ShutdownCommand shutdownCommand = new ShutdownCommand(app, serversToShutdown);
             shutdownCommand.execute();
         });
         toolBar.getItems().add(shutdownButton);

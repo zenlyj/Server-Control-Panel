@@ -22,12 +22,14 @@ public class MainPage {
         Table table = new Table(app);
         FunctionBar functionBar = new FunctionBar(app, table.getTable());
         ServerDetails serverDetails = new ServerDetails(table.getTable());
+        CommandHistory commandHistory = new CommandHistory(app);
 
         grid.add(functionBar.getFunctionBar(), 0, 0);
         grid.add(table.getTable(), 0, 1);
         grid.add(serverDetails.getDetails(), 1, 1);
+        grid.add(commandHistory.getHistoryBox(), 0, 2);
 
-        Scene scene = new Scene(grid, 500, 400);
+        Scene scene = new Scene(grid, 600, 500);
         return scene;
     }
 }

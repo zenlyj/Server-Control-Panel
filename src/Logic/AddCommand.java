@@ -21,7 +21,15 @@ public class AddCommand extends Command {
 
     public void execute() {
         ObservableList<Server> servers = app.getServers();
-        servers.add(new Server(ipAddress, serverName, userName, password));
-        app.commit(servers);
+        Server newServer = new Server(ipAddress, serverName, userName, password);
+        if (!servers.contains(newServer)) {
+            servers.add(new Server(ipAddress, serverName, userName, password));
+            app.commit(servers);
+            String successMessage = serverName + " successfully added!\n";
+            app.addHistory(successMessage);
+        } else {
+            String failureMessage = "Server already exists! Aborting add operation...\n";
+            app.addHistory(failureMessage);
+        }
     }
 }
