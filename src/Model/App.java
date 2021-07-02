@@ -1,5 +1,8 @@
 package Model;
 
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,6 +19,7 @@ public class App {
     private LinkedList<Server> serversInDelete;
     private Storage db;
     private StringProperty history;
+    private DateTimeFormatter timeFormatter;
 
     public App() {
         db = new Storage();
@@ -24,6 +28,7 @@ public class App {
         serversInEdit = new HashSet<>();
         serversInDelete = new LinkedList<>();
         history = new SimpleStringProperty();
+        timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
     }
 
     public void commit(List<Server> servers) {
@@ -40,6 +45,8 @@ public class App {
 
     public void addHistory(String newHistory) {
         String currentHistory = this.history.get();
+        LocalTime time = LocalTime.now(ZoneId.systemDefault());
+        newHistory = time.format(timeFormatter) + "  " + newHistory;
         String updatedHistory = currentHistory == null ? newHistory : currentHistory+newHistory;
         this.history.set(updatedHistory);
     }
