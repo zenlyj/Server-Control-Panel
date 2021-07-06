@@ -5,10 +5,6 @@ import javafx.beans.property.StringProperty;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-
 public class CommandHistory {
     private App app;
     private TextArea historyBox;

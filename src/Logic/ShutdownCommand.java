@@ -5,6 +5,7 @@ import Model.Server;
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellNotAvailableException;
 import com.profesorfalken.jpowershell.PowerShellResponse;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class ShutdownCommand extends Command {
                     }
                 };
                 new Thread(task).start();
+                app.addHistory("Initiated shutdown for " + server.getServerName() + "\n");
             } else {
                 String offlineFailureMessage = server.getServerName() + " is offline! Aborting shutdown operation...\n";
                 app.addHistory(offlineFailureMessage);
@@ -49,16 +51,20 @@ public class ShutdownCommand extends Command {
             powerShell.executeCommand("[securestring]$securePassword = ConvertTo-SecureString $password -AsPlainText -Force");
             powerShell.executeCommand("$creds = New-Object System.Management.Automation.PSCredential ($userName, $securePassword)");
             PowerShellResponse response = powerShell.configuration(myConfig).executeCommand("Stop-Computer -ComputerName $serverIP -Credential $creds -Force");
-            if (!response.getCommandOutput().isBlank()) {
-                // Show error message
-                String incorrectCredentialsMessage = "Failed to shutdown " + server.getServerName() + ", ensure that the correct credentials are provided\n";
-                app.addHistory(incorrectCredentialsMessage);
-            } else {
-                String successMessage = server.getServerName() + " successfully shut down\n";
-                app.addHistory(successMessage);
-            }
+            Platform.runLater(()->{
+                String commandResult = "";
+                if (!response.getCommandOutput().isBlank()) {
+                    // Show error message
+                    commandResult = "Failed to shutdown " + server.getServerName() + ", ensure that the correct credentials are provided\n";
+                } else {
+                    commandResult = server.getServerName() + " successfully shut down\n";
+                }
+               app.addHistory(commandResult);
+            });
         } catch (PowerShellNotAvailableException ex) {
-            app.addHistory("Powershell is not available on this work station! Aborting shutdown operation...\n");
+            Platform.runLater(()->{
+                app.addHistory("Powershell is not available on this work station! Aborting shutdown operation...\n");
+            });
         }
     }
 }

@@ -1,11 +1,13 @@
 package UI;
 
+import Logic.ChangeIPCommand;
 import Logic.DeleteCommand;
 import Logic.PingCommand;
 import Logic.ShutdownCommand;
 import Model.App;
 import Model.Server;
 import javafx.collections.ListChangeListener;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToolBar;
@@ -53,8 +55,10 @@ public class FunctionBar {
             stage.setScene(EditForm.getForm(app, selectedIdx));
             stage.show();
         });
+        editButton.setVisible(false);
         tableView.getSelectionModel().getSelectedItems().addListener((ListChangeListener) change -> {
-            if (tableView.getSelectionModel().getSelectedItems().size() > 1) {
+            int numSelected = tableView.getSelectionModel().getSelectedItems().size();
+            if (numSelected != 1) {
                 editButton.setVisible(false);
             } else {
                 editButton.setVisible(true);
@@ -83,12 +87,32 @@ public class FunctionBar {
         toolBar.getItems().add(pingButton);
     }
 
+    private void setChangeIPBtn() {
+        Button changeIPButton = new Button("Change IP");
+        changeIPButton.setOnAction(actionEvent -> {
+            int serverIdx = tableView.getSelectionModel().getSelectedIndex();
+            Stage stage = new Stage();
+            stage.setScene(ChangeIPForm.getForm(app, serverIdx));
+            stage.show();
+        });
+        changeIPButton.setVisible(false);
+        tableView.getSelectionModel().getSelectedItems().addListener((ListChangeListener) change -> {
+            if (tableView.getSelectionModel().getSelectedItems().size() != 1) {
+                changeIPButton.setVisible(false);
+            } else {
+                changeIPButton.setVisible(true);
+            }
+        });
+        toolBar.getItems().add(changeIPButton);
+    }
+
     public HBox getFunctionBar() {
         setAddServerBtn();
         setDeleteServerBtn();
         setPingBtn();
         setShutdownBtn();
         setEditServerBtn();
+        setChangeIPBtn();
         HBox hbox = new HBox(toolBar);
         return hbox;
     }
