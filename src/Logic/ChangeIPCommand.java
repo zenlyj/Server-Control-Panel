@@ -8,14 +8,19 @@ import com.profesorfalken.jpowershell.PowerShellResponse;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ChangeIPCommand extends Command {
     private App app;
     private Server server;
     private final String newIPAddress;
     private final String newServerName;
+    private final int serverIdx;
 
     public ChangeIPCommand(App app, int serverIdx, String newIPAddress, String newServerName) {
         this.app = app;
+        this.serverIdx = serverIdx;
         this.server = app.getServers().get(serverIdx);
         this.newIPAddress = newIPAddress;
         this.newServerName = newServerName;
@@ -39,17 +44,24 @@ public class ChangeIPCommand extends Command {
         }
     }
 
+    private String lstToString(List<Server> servers) {
+        String res = "";
+        for (Server s : servers) {
+            res += s.getIpAddress() + ",";
+        }
+        return res.substring(0, res.length()-1);
+    }
+
 
     public void powerShellExec() {
-        // TODO: set new IP address to trusted hosts list
-        // TODO: Update server object in list
-        // set-item wsman:\localhost\client\trustedhosts -value {IPADDRESS}
-        // winrm quickconfig
-        
+        // TODO: If IP address not changed, do not modify
+
         try (PowerShell powerShell = PowerShell.openSession()) {
             powerShell.executeCommand("$serverIP='" + server.getIpAddress() + "'");
             powerShell.executeCommand("$userName='" + server.getUserName() + "'");
             powerShell.executeCommand("$password='" + server.getPassword() + "'");
+            powerShell.executeCommand("$allServerIP='" + lstToString(app.getServers()) + "'");
+            PowerShellResponse r = powerShell.executeCommand("Set-Item wsman:\\localhost\\client\\trustedhosts -value $allServerIP -Force");
             powerShell.executeCommand("[securestring]$securePassword = ConvertTo-SecureString $password -AsPlainText -Force");
             powerShell.executeCommand("$creds = New-Object System.Management.Automation.PSCredential ($userName, $securePassword)");
             powerShell.executeCommand("$s = New-PSSession -ComputerName " + server.getIpAddress() + " -Credential $creds");
@@ -61,13 +73,25 @@ public class ChangeIPCommand extends Command {
             powerShell.executeCommand("Invoke-Command -Session $s -ScriptBlock {New-NetIPAddress -InterfaceIndex $adapterIndex -IPAddress $newIPAddr -PrefixLength 24}");
             PowerShellResponse response = powerShell.executeCommand("Invoke-Command -Session $s -ScriptBlock {Remove-NetIPAddress -InterfaceIndex $adapterIndex -IPAddress $oldIPAddr -Confirm:$false}");
 
+            boolean success = false;
+            if (response.getCommandOutput().isBlank()) {
+                success = true;
+                List<Server> updatedServers = new ArrayList<>(app.getServers());
+                updatedServers.set(serverIdx, new Server(newIPAddress, newServerName, server.getUserName(), server.getPassword()));
+                powerShell.executeCommand("$updatedServerIP='" + lstToString(updatedServers) + "'");
+                powerShell.executeCommand("Set-Item wsman:\\localhost\\client\\trustedhosts -value $updatedServerIP -Force");
+            } else {
+                System.out.println(response.getCommandOutput());
+            }
+            final boolean isChanged = success;
+
             Platform.runLater(()->{
-                String commandResult = response.getCommandOutput();
-                if (commandResult.isBlank()) {
+                if (isChanged) {
+                    EditCommand editCmd = new EditCommand(app, serverIdx, server.getUserName(), server.getPassword(), newServerName, newIPAddress);
+                    editCmd.execute();
                     app.addHistory(server.getServerName() + "'s IP address successfully changed from " + server.getIpAddress() + " to " + newIPAddress + "\n");
                     app.addHistory(server.getServerName() + " sucessfully renamed to " + newServerName + "\n");
                 } else {
-                    System.out.println(response.getCommandOutput());
                     app.addHistory("Failed to change IP address of "+ server.getServerName() + "\n");
                 }
             });
