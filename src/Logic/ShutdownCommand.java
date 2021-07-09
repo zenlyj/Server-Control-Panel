@@ -16,6 +16,11 @@ import java.util.Map;
 public class ShutdownCommand extends Command {
     private App app;
     private List<Server> servers;
+    private final String initShutdownMessage = "Initiated shutdown for %s \n";
+    private final String offlineFailureMessage = "%s is offline! Aborting shutdown operation\n";
+    private final String shutdownFailureMessage = "Failed to shutdown %s, ensure that the correct credentials are provided\n";
+    private final String shutdownSuccessMessage = "%s successfully shut down!\n";
+    private final String powershellUnavailableMessage = "Powershell is not available on this work station! Aborting shutdown operation...\n";
 
     public ShutdownCommand(App app, List<Server> servers) {
         this.app = app;
@@ -33,10 +38,9 @@ public class ShutdownCommand extends Command {
                     }
                 };
                 new Thread(task).start();
-                app.addHistory("Initiated shutdown for " + server.getServerName() + "\n");
+                app.addHistory(String.format(initShutdownMessage, server.getServerName()));
             } else {
-                String offlineFailureMessage = server.getServerName() + " is offline! Aborting shutdown operation...\n";
-                app.addHistory(offlineFailureMessage);
+                app.addHistory(String.format(offlineFailureMessage, server.getServerName()));
             }
         }
     }
@@ -56,15 +60,15 @@ public class ShutdownCommand extends Command {
                 String commandResult = "";
                 if (!response.getCommandOutput().isBlank()) {
                     // Show error message
-                    commandResult = "Failed to shutdown " + server.getServerName() + ", ensure that the correct credentials are provided\n";
+                    commandResult = String.format(shutdownFailureMessage, server.getServerName());
                 } else {
-                    commandResult = server.getServerName() + " successfully shut down\n";
+                    commandResult = String.format(shutdownSuccessMessage, server.getServerName());
                 }
                app.addHistory(commandResult);
             });
         } catch (PowerShellNotAvailableException ex) {
             Platform.runLater(()->{
-                app.addHistory("Powershell is not available on this work station! Aborting shutdown operation...\n");
+                app.addHistory(powershellUnavailableMessage);
             });
         }
     }

@@ -19,7 +19,6 @@ public class SchedulePingCommand extends Command {
 
     public SchedulePingCommand(App app) {
         this.app = app;
-        this.serversSnapshot = listDeepCopy(app.getServers());
     }
 
     private List<Server> listDeepCopy(List<Server> servers) {
@@ -78,6 +77,7 @@ public class SchedulePingCommand extends Command {
                     @Override
                     protected Void call() throws Exception {
                         System.out.println("Starting schedule...");
+                        serversSnapshot = listDeepCopy(app.getServers());
                         pingServers();
                         updateMainApp();
                         return null;

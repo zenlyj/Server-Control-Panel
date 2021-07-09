@@ -17,6 +17,11 @@ public class ChangeIPCommand extends Command {
     private final String newIPAddress;
     private final String newServerName;
     private final int serverIdx;
+    private final String changeIPSuccessMessage = "%1$s's ip address is changed from %2$s to %3$s\n";
+    private final String changeNameSuccessMessage = "%1$s successfully renamed to %2$s\n";
+    private final String noChangeMessage = "No IP change made to %s\n";
+    private final String changeIPFailureMessage = "Failed to change IP for %s\n";
+    private final String psUnavailableMessage = "Powershell is not available on this work station! Aborting change operation...\n";
 
     public ChangeIPCommand(App app, int serverIdx, String newIPAddress, String newServerName) {
         this.app = app;
@@ -85,10 +90,8 @@ public class ChangeIPCommand extends Command {
             if (isChanged) {
                 EditCommand editCmd = new EditCommand(app, serverIdx, server.getUserName(), server.getPassword(), newServerName, newIPAddress);
                 editCmd.execute();
-                app.addHistory(server.getServerName() + "'s IP address successfully changed from " + server.getIpAddress() + " to " + newIPAddress + "\n");
-                app.addHistory(server.getServerName() + " sucessfully renamed to " + newServerName + "\n");
-            } else {
-                app.addHistory("Failed to change IP address of "+ server.getServerName() + "\n");
+                app.addHistory(String.format(changeIPSuccessMessage, server.getServerName(), server.getIpAddress(), newIPAddress));
+                app.addHistory(String.format(changeNameSuccessMessage, server.getServerName(), newServerName));
             }
         });
     }
@@ -107,17 +110,17 @@ public class ChangeIPCommand extends Command {
                     powerShell.executeCommand(PSCommand.declareStringVar("updatedServerIP", lstToString(updatedServers)));
                     powerShell.executeCommand(PSCommand.setTrustedHosts("updatedServerIP"));
                 } else {
-                    app.addHistory("Failed to change IP");
+                    app.addHistory(String.format(changeIPFailureMessage, server.getServerName()));
                 }
             } else {
-                app.addHistory("No changes made to IP");
+                app.addHistory(String.format(noChangeMessage, server.getServerName()));
             }
 
             final boolean isChanged = success;
             updateMainApp(isChanged);
         } catch (PowerShellNotAvailableException ex) {
             Platform.runLater(()->{
-                app.addHistory("Powershell is not available on this work station! Aborting change IP operation...\n");
+                app.addHistory(psUnavailableMessage);
             });
         }
     }

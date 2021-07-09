@@ -10,6 +10,8 @@ public class AddCommand extends Command {
     private String password;
     private String serverName;
     private String ipAddress;
+    private final String addSuccessMessage = "%s successfully added!\n";
+    private final String addFailureMessage = "%s already exists! Aborting add operation...\n";
 
     public AddCommand(App app, String userName, String password, String serverName, String ipAddress) {
         this.app = app;
@@ -25,11 +27,9 @@ public class AddCommand extends Command {
         if (!servers.contains(newServer)) {
             servers.add(new Server(ipAddress, serverName, userName, password));
             app.commit(servers);
-            String successMessage = serverName + " successfully added!\n";
-            app.addHistory(successMessage);
+            app.addHistory(String.format(addSuccessMessage, serverName));
         } else {
-            String failureMessage = "Server already exists! Aborting add operation...\n";
-            app.addHistory(failureMessage);
+            app.addHistory(String.format(addFailureMessage, serverName));
         }
     }
 }

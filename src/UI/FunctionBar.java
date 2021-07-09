@@ -1,13 +1,11 @@
 package UI;
 
-import Logic.ChangeIPCommand;
 import Logic.DeleteCommand;
 import Logic.PingCommand;
 import Logic.ShutdownCommand;
 import Model.App;
 import Model.Server;
 import javafx.collections.ListChangeListener;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToolBar;
