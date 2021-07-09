@@ -52,49 +52,69 @@ public class ChangeIPCommand extends Command {
         return res.substring(0, res.length()-1);
     }
 
+    private boolean isIPChange() {
+        return !(newIPAddress.equals(server.getIpAddress()));
+    }
+
+    private PowerShellResponse createSession(PowerShell powerShell) {
+        powerShell.executeCommand(PSCommand.declareStringVar("serverIP", server.getIpAddress()));
+        powerShell.executeCommand(PSCommand.declareStringVar("userName", server.getUserName()));
+        powerShell.executeCommand(PSCommand.declareStringVar("password", server.getPassword()));
+        powerShell.executeCommand(PSCommand.declareSecurePasswordVar("securePassword", "password"));
+        powerShell.executeCommand(PSCommand.declareCredsVar("creds", "userName", "securePassword"));
+        return powerShell.executeCommand(PSCommand.declareSessionVar("s", "serverIP", "creds"));
+    }
+
+    private void renameServer(PowerShell powerShell) {
+        powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.declareStringVar("newServerName", newServerName)));
+        powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.renameCommand("newServerName")));
+    }
+
+    private PowerShellResponse changeIP(PowerShell powerShell) {
+        powerShell.executeCommand(PSCommand.declareStringVar("allServerIP", lstToString(app.getServers())));
+        powerShell.executeCommand(PSCommand.setTrustedHosts("allServerIP"));
+        powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.declareStringVar("newIPAddr", newIPAddress)));
+        powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.declareStringVar("oldIPAddr", server.getIpAddress())));
+        powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.declareAdapterVar("adapterIndex", "NIC1")));
+        powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.newIPCommand("adapterIndex", "newIPAddr")));
+        return powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.removeIPCommand("adapterIndex", "oldIPAddr")));
+    }
+
+    private void updateMainApp(boolean isChanged) {
+        Platform.runLater(() -> {
+            if (isChanged) {
+                EditCommand editCmd = new EditCommand(app, serverIdx, server.getUserName(), server.getPassword(), newServerName, newIPAddress);
+                editCmd.execute();
+                app.addHistory(server.getServerName() + "'s IP address successfully changed from " + server.getIpAddress() + " to " + newIPAddress + "\n");
+                app.addHistory(server.getServerName() + " sucessfully renamed to " + newServerName + "\n");
+            } else {
+                app.addHistory("Failed to change IP address of "+ server.getServerName() + "\n");
+            }
+        });
+    }
 
     public void powerShellExec() {
-        // TODO: If IP address not changed, do not modify
-
         try (PowerShell powerShell = PowerShell.openSession()) {
-            powerShell.executeCommand("$serverIP='" + server.getIpAddress() + "'");
-            powerShell.executeCommand("$userName='" + server.getUserName() + "'");
-            powerShell.executeCommand("$password='" + server.getPassword() + "'");
-            powerShell.executeCommand("$allServerIP='" + lstToString(app.getServers()) + "'");
-            PowerShellResponse r = powerShell.executeCommand("Set-Item wsman:\\localhost\\client\\trustedhosts -value $allServerIP -Force");
-            powerShell.executeCommand("[securestring]$securePassword = ConvertTo-SecureString $password -AsPlainText -Force");
-            powerShell.executeCommand("$creds = New-Object System.Management.Automation.PSCredential ($userName, $securePassword)");
-            powerShell.executeCommand("$s = New-PSSession -ComputerName " + server.getIpAddress() + " -Credential $creds");
-            powerShell.executeCommand("Invoke-Command -Session $s -ScriptBlock {$newIPAddr='" + newIPAddress + "'}");
-            powerShell.executeCommand("Invoke-Command -Session $s -ScriptBlock {$oldIPAddr='" + server.getIpAddress() + "'}");
-            powerShell.executeCommand("Invoke-Command -Session $s -ScriptBlock {$adapterIndex = Get-NetAdapter | % { Process { If (( $_.Status -eq \"up\" ) -and ($_.Name -eq \"NIC1\") ){ $_.ifIndex } }}}");
-            powerShell.executeCommand("Invoke-Command -Session $s -ScriptBlock {$newServerName='" + newServerName + "'}");
-            powerShell.executeCommand("Invoke-Command -Session $s -ScriptBlock {(Get-WmiObject Win32_ComputerSystem).Rename($newServerName)}");
-            powerShell.executeCommand("Invoke-Command -Session $s -ScriptBlock {New-NetIPAddress -InterfaceIndex $adapterIndex -IPAddress $newIPAddr -PrefixLength 24}");
-            PowerShellResponse response = powerShell.executeCommand("Invoke-Command -Session $s -ScriptBlock {Remove-NetIPAddress -InterfaceIndex $adapterIndex -IPAddress $oldIPAddr -Confirm:$false}");
-
+            createSession(powerShell);
+            renameServer(powerShell);
             boolean success = false;
-            if (response.getCommandOutput().isBlank()) {
-                success = true;
-                List<Server> updatedServers = new ArrayList<>(app.getServers());
-                updatedServers.set(serverIdx, new Server(newIPAddress, newServerName, server.getUserName(), server.getPassword()));
-                powerShell.executeCommand("$updatedServerIP='" + lstToString(updatedServers) + "'");
-                powerShell.executeCommand("Set-Item wsman:\\localhost\\client\\trustedhosts -value $updatedServerIP -Force");
-            } else {
-                System.out.println(response.getCommandOutput());
-            }
-            final boolean isChanged = success;
-
-            Platform.runLater(()->{
-                if (isChanged) {
-                    EditCommand editCmd = new EditCommand(app, serverIdx, server.getUserName(), server.getPassword(), newServerName, newIPAddress);
-                    editCmd.execute();
-                    app.addHistory(server.getServerName() + "'s IP address successfully changed from " + server.getIpAddress() + " to " + newIPAddress + "\n");
-                    app.addHistory(server.getServerName() + " sucessfully renamed to " + newServerName + "\n");
+            if (isIPChange()) {
+                PowerShellResponse response = changeIP(powerShell);
+                if (response.getCommandOutput().isBlank()) {
+                    success = true;
+                    List<Server> updatedServers = new ArrayList<>(app.getServers());
+                    updatedServers.set(serverIdx, new Server(newIPAddress, newServerName, server.getUserName(), server.getPassword()));
+                    powerShell.executeCommand(PSCommand.declareStringVar("updatedServerIP", lstToString(updatedServers)));
+                    powerShell.executeCommand(PSCommand.setTrustedHosts("updatedServerIP"));
                 } else {
-                    app.addHistory("Failed to change IP address of "+ server.getServerName() + "\n");
+                    app.addHistory("Failed to change IP");
                 }
-            });
+            } else {
+                app.addHistory("No changes made to IP");
+            }
+
+            final boolean isChanged = success;
+            updateMainApp(isChanged);
         } catch (PowerShellNotAvailableException ex) {
             Platform.runLater(()->{
                 app.addHistory("Powershell is not available on this work station! Aborting change IP operation...\n");

@@ -1,3 +1,4 @@
+import Logic.PSCommand;
 import Logic.SchedulePingCommand;
 import Model.App;
 import Model.Server;
@@ -66,6 +67,7 @@ public class Main extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        System.out.println(PSCommand.invokeCommand("sesh", PSCommand.removeIPCommand("ada", "old")));
         App app = new App();
         MainPage mainPage = new MainPage();
         primaryStage.setTitle("Server Manager");
