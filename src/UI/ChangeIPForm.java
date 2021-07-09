@@ -2,6 +2,8 @@ package UI;
 
 import Logic.ChangeIPCommand;
 import Logic.Command;
+import Logic.Parser;
+import Logic.ParserException;
 import Model.App;
 import Model.Server;
 import javafx.geometry.Insets;
@@ -35,7 +37,7 @@ public class ChangeIPForm {
         grid.add(sceneTitle, 0, 0, 2, 1);
     }
 
-    private static TextField setIP(GridPane grid, String currIP) {
+    private static TextField setIPField(GridPane grid, String currIP) {
         Label ipAddress = new Label("IP Address:");
         TextField ipField = new TextField();
         ipField.setText(currIP);
@@ -44,7 +46,7 @@ public class ChangeIPForm {
         return ipField;
     }
 
-    private static TextField setServerName(GridPane grid, String currServerName) {
+    private static TextField setServerNameField(GridPane grid, String currServerName) {
         Label serverName = new Label("Server Name:");
         TextField serverNameField = new TextField();
         serverNameField.setText(currServerName);
@@ -62,13 +64,19 @@ public class ChangeIPForm {
         grid.add(hbBtn, 1, 3);
     }
 
-    private static void setConfirmBtnHandler(App app, int selectedIdx, Button confirmBtn, TextField ipField, TextField serverName) {
+    private static void setConfirmBtnHandler(App app, int selectedIdx, Button confirmBtn, TextField ipField, TextField serverNameField) {
         confirmBtn.setOnAction(value -> {
-            Command cmd = new ChangeIPCommand(app, selectedIdx, ipField.getText(), serverName.getText());
-            cmd.execute();
-            Node source = (Node) value.getSource();
-            Stage stage = (Stage) source.getScene().getWindow();
-            stage.close();
+            try {
+                String serverName = serverNameField.getText().strip();
+                String ip = Parser.parseIPAddress(ipField.getText());
+                Command cmd = new ChangeIPCommand(app, selectedIdx, ip, serverName);
+                cmd.execute();
+                Node source = (Node) value.getSource();
+                Stage stage = (Stage) source.getScene().getWindow();
+                stage.close();
+            } catch (ParserException ex) {
+                app.addHistory(ex.getMessage());
+            }
         });
     }
 
@@ -84,8 +92,8 @@ public class ChangeIPForm {
         Server selectedServer = app.getServers().get(selectedIdx);
         GridPane grid = createGridPane();
         setTitle(grid, "Modify IP Address / Name");
-        TextField ipField = setIP(grid, selectedServer.getIpAddress());
-        TextField serverNameField = setServerName(grid, selectedServer.getServerName());
+        TextField ipField = setIPField(grid, selectedServer.getIpAddress());
+        TextField serverNameField = setServerNameField(grid, selectedServer.getServerName());
         Button confirmBtn = new Button("Confirm");
         setConfirmBtnHandler(app, selectedIdx, confirmBtn, ipField, serverNameField);
         Button cancelBtn = new Button("Cancel");

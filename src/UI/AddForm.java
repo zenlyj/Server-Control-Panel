@@ -2,6 +2,8 @@ package UI;
 
 import Logic.AddCommand;
 import Logic.Command;
+import Logic.Parser;
+import Logic.ParserException;
 import Model.App;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -77,11 +79,19 @@ public class AddForm {
 
     private static void setConfirmBtnHandler(App app, Button confirmBtn, TextField userNameField, TextField passwordField, TextField serverNameField, TextField ipField) {
         confirmBtn.setOnAction(value -> {
-            Command cmd = new AddCommand(app, userNameField.getText(), passwordField.getText(), serverNameField.getText(), ipField.getText());
-            cmd.execute();
-            Node source = (Node) value.getSource();
-            Stage stage = (Stage) source.getScene().getWindow();
-            stage.close();
+            try {
+                String userName = userNameField.getText();
+                String password = passwordField.getText();
+                String serverName = serverNameField.getText().strip();
+                String ip = Parser.parseIPAddress(ipField.getText());
+                Command cmd = new AddCommand(app, userName, password, serverName, ip);
+                cmd.execute();
+                Node source = (Node) value.getSource();
+                Stage stage = (Stage) source.getScene().getWindow();
+                stage.close();
+            } catch (ParserException ex){
+                app.addHistory(ex.getMessage());
+            }
         });
     }
 

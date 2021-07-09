@@ -2,6 +2,8 @@ package UI;
 
 import Logic.Command;
 import Logic.EditCommand;
+import Logic.Parser;
+import Logic.ParserException;
 import Model.App;
 import Model.Server;
 import javafx.geometry.Insets;
@@ -81,11 +83,19 @@ public class EditForm {
 
     private static void setConfirmBtnHandler(App app, int selectedIdx, Button confirmBtn, TextField userNameField, TextField passwordField, TextField serverNameField, TextField ipField) {
         confirmBtn.setOnAction(value -> {
-            Command cmd = new EditCommand(app, selectedIdx, userNameField.getText(), passwordField.getText(), serverNameField.getText(), ipField.getText());
-            cmd.execute();
-            Node source = (Node) value.getSource();
-            Stage stage = (Stage) source.getScene().getWindow();
-            stage.close();
+            try {
+                String userName = userNameField.getText();
+                String password = passwordField.getText();
+                String serverName = serverNameField.getText().strip();
+                String ip = Parser.parseIPAddress(ipField.getText());
+                Command cmd = new EditCommand(app, selectedIdx, userName, password, serverName, ip);
+                cmd.execute();
+                Node source = (Node) value.getSource();
+                Stage stage = (Stage) source.getScene().getWindow();
+                stage.close();
+            } catch (ParserException ex) {
+                app.addHistory(ex.getMessage());
+            }
         });
     }
 
