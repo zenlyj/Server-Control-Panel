@@ -1,35 +1,19 @@
 package UI;
 
 import Model.App;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 
+import java.net.URL;
+
 public class MainPage {
-
-    public GridPane createGridPane() {
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER_LEFT);
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(10, 10, 10, 10));
-        return grid;
-    }
-
-    public Scene getMainPage(App app) {
-        GridPane grid = createGridPane();
-        Table table = new Table(app);
-        FunctionBar functionBar = new FunctionBar(app, table.getTable());
-        ServerDetails serverDetails = new ServerDetails(table.getTable());
-        CommandHistory commandHistory = new CommandHistory(app);
-
-        grid.add(functionBar.getFunctionBar(), 0, 0);
-        grid.add(table.getTable(), 0, 1);
-        grid.add(serverDetails.getDetails(), 1, 1);
-        grid.add(commandHistory.getHistoryBox(), 0, 2);
-
-        Scene scene = new Scene(grid, 600, 500);
-        return scene;
+    public Scene getMainPage(App app) throws Exception {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(new URL("file:///C:/school/kratos/src/FXML/MainPageForm.fxml"));
+        GridPane grid = loader.<GridPane>load();
+        MainPageFormController controller = loader.getController();
+        controller.init(app);
+        return new Scene(grid);
     }
 }

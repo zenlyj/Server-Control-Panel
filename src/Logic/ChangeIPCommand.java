@@ -96,6 +96,14 @@ public class ChangeIPCommand extends Command {
         });
     }
 
+    private List<Server> lstDeepCopy(List<Server> servers) {
+        List<Server> res = new ArrayList<>();
+        for (Server server : servers) {
+            res.add(new Server(server));
+        }
+        return res;
+    }
+
     public void powerShellExec() {
         try (PowerShell powerShell = PowerShell.openSession()) {
             createSession(powerShell);
@@ -105,7 +113,7 @@ public class ChangeIPCommand extends Command {
                 PowerShellResponse response = changeIP(powerShell);
                 if (response.getCommandOutput().isBlank()) {
                     success = true;
-                    List<Server> updatedServers = new ArrayList<>(app.getServers());
+                    List<Server> updatedServers = lstDeepCopy(app.getServers());
                     updatedServers.set(serverIdx, new Server(newIPAddress, newServerName, server.getUserName(), server.getPassword()));
                     powerShell.executeCommand(PSCommand.declareStringVar("updatedServerIP", lstToString(updatedServers)));
                     powerShell.executeCommand(PSCommand.setTrustedHosts("updatedServerIP"));
