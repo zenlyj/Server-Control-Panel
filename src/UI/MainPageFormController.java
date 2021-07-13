@@ -10,12 +10,15 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.ListChangeListener;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -23,6 +26,20 @@ import java.util.List;
 
 public class MainPageFormController {
     private App app;
+    @FXML
+    private Button addButton;
+    @FXML
+    private Button deleteButton;
+    @FXML
+    private Button pingButton;
+    @FXML
+    private Button shutdownButton;
+    @FXML
+    private Button editButton;
+    @FXML
+    private Button changeIDButton;
+    @FXML
+    private Button remoteDesktopButton;
     @FXML
     private Label userNameDetails;
     @FXML
@@ -157,8 +174,27 @@ public class MainPageFormController {
         ipDetails.setText("IP Address: " + newSelection.getIpAddress());
     }
 
+    private void initButtons() {
+        Image add = new Image(MainPageFormController.class.getResourceAsStream("/plus.png"));
+        Image delete = new Image(MainPageFormController.class.getResourceAsStream("/substract.png"));
+        Image ping = new Image(MainPageFormController.class.getResourceAsStream("/local-network.png"));
+        Image shutdown = new Image(MainPageFormController.class.getResourceAsStream("/power.png"));
+        Image edit = new Image(MainPageFormController.class.getResourceAsStream("/edit.png"));
+        Image changeID = new Image(MainPageFormController.class.getResourceAsStream("/remote-control.png"));
+        Image remoteDesktop = new Image(MainPageFormController.class.getResourceAsStream("/slide.png"));
+
+        addButton.setGraphic(new ImageView(add));
+        deleteButton.setGraphic(new ImageView(delete));
+        pingButton.setGraphic(new ImageView(ping));
+        shutdownButton.setGraphic(new ImageView(shutdown));
+        editButton.setGraphic(new ImageView(edit));
+        changeIDButton.setGraphic(new ImageView(changeID));
+        remoteDesktopButton.setGraphic(new ImageView(remoteDesktop));
+    }
+
     public void init(App app) {
         this.app = app;
+        initButtons();
         initHistoryBox();
         initServerDetails();
         initTableView();
