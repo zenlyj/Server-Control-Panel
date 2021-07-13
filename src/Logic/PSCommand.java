@@ -44,4 +44,12 @@ public class PSCommand {
     public static String removeIPCommand(String adapterVar, String oldIPVar) {
         return String.format("Remove-NetIPAddress -InterfaceIndex $%1$s -IPAddress $%2$s -Confirm:$false", adapterVar, oldIPVar);
     }
+
+    public static String cmdKey(String serverIPVar, String userNameVar, String passwordVar) {
+        return String.format("cmdkey /generic:TERMSRV/$%1$s /user:$%2$s /pass:$%3$s", serverIPVar, userNameVar, passwordVar);
+    }
+
+    public static String mstscExec(String serverIPVar) {
+        return String.format("mstsc /v:$%s", serverIPVar);
+    }
 }

@@ -2,6 +2,7 @@ package UI;
 
 import Logic.DeleteCommand;
 import Logic.PingCommand;
+import Logic.RemoteDesktopCommand;
 import Logic.ShutdownCommand;
 import Model.App;
 import Model.Server;
@@ -97,7 +98,9 @@ public class MainPageFormController {
 
     @FXML
     public void handleRemoteDesktop(Event e) {
-        System.out.println("ASD");
+        Server server = (Server) tableView.getSelectionModel().getSelectedItem();
+        RemoteDesktopCommand remoteDesktopCommand = new RemoteDesktopCommand(app, server);
+        remoteDesktopCommand.execute();
     }
 
     public void initTableView() {
