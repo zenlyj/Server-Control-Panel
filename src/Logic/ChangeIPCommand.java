@@ -22,6 +22,8 @@ public class ChangeIPCommand extends Command {
     private final String noChangeMessage = "No IP change made to %s\n";
     private final String changeIPFailureMessage = "Failed to change IP for %s\n";
     private final String psUnavailableMessage = "Powershell is not available on this work station! Aborting change operation...\n";
+    private final String offlineFailureMessage = "%s is offline! Aborting change ip/name operation...\n";
+    private final String initChangeMessage = "Initiated ip/name change for %s\n";
 
     public ChangeIPCommand(App app, int serverIdx, String newIPAddress, String newServerName) {
         this.app = app;
@@ -42,10 +44,9 @@ public class ChangeIPCommand extends Command {
                 }
             };
             new Thread(task).start();
-            app.addHistory("Initiated ip/name change for " + server.getServerName() + "\n");
+            app.addHistory(String.format(initChangeMessage, server.getServerName()));
         } else {
-            String offlineFailureMessage = server.getServerName() + " is offline! Aborting change ip/name operation...\n";
-            app.addHistory(offlineFailureMessage);
+            app.addHistory(String.format(offlineFailureMessage, server.getServerName()));
         }
     }
 

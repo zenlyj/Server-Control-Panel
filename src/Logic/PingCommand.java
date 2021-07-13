@@ -12,6 +12,8 @@ import java.util.List;
 public class PingCommand extends Command {
     private App app;
     private List<Integer> serverIndices;
+    private final String unknownHostMessage = "The following host is unknown: %s\n";
+    private final String networkErrorMessage = "Unable to establish network connection to %s!\n";
 
     public PingCommand(App app, List<Integer> serverIndices) {
         this.app = app;
@@ -27,11 +29,9 @@ public class PingCommand extends Command {
             try {
                 isOnline = InetAddress.getByName(serverToCheck.getIpAddress()).isReachable(300);
             } catch (UnknownHostException e) {
-                String unknownHostMessage = "The following host is unknown: " + serverToCheck.getServerName();
-                app.addHistory(unknownHostMessage);
+                app.addHistory(String.format(unknownHostMessage, serverToCheck.getServerName()));
             } catch (IOException e) {
-                String networkErrorMessage = "Unable to establish network connection to " + serverToCheck.getServerName();
-                app.addHistory(networkErrorMessage);
+                app.addHistory(String.format(networkErrorMessage, serverToCheck.getServerName()));
             } catch (IllegalArgumentException e) {
                 // Will never have a negative timeout
             }

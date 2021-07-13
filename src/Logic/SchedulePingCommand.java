@@ -16,6 +16,8 @@ import java.util.List;
 public class SchedulePingCommand extends Command {
     private App app;
     private List<Server> serversSnapshot;
+    private final String unknownHostMessage = "The following host is unknown: %s\n";
+    private final String networkErrorMessage = "Unable to establish network connection to %s!\n";
 
     public SchedulePingCommand(App app) {
         this.app = app;
@@ -35,9 +37,9 @@ public class SchedulePingCommand extends Command {
             try {
                 isOnline = InetAddress.getByName(server.getIpAddress()).isReachable(300);
             } catch (UnknownHostException e) {
-                System.out.println("The following host is unknown: " + server.getServerName());
+                app.addHistory(String.format(unknownHostMessage, server.getServerName()));
             } catch (IOException e) {
-                System.out.println("A network error has occurred!");
+                app.addHistory(String.format(networkErrorMessage, server.getServerName()));
             } catch (IllegalArgumentException e) {
                 // will never have a negative timeout
             }
