@@ -10,7 +10,7 @@ import java.net.URL;
 public class MainPage {
     public Scene getMainPage(App app) throws Exception {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(new URL("file:///C:/school/kratos/src/FXML/MainPageForm.fxml"));
+        loader.setLocation(MainPage.class.getResource("/MainPageForm.fxml"));
         GridPane grid = loader.<GridPane>load();
         MainPageFormController controller = loader.getController();
         controller.init(app);
