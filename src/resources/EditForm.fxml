@@ -39,7 +39,7 @@
         <Font name="Tahoma" size="14.0" />
       </font>
     </Label>
-    <TextField fx:id="userNameField" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
+    <TextField fx:id="userNameField" GridPane.columnIndex="1" GridPane.rowIndex="1">
       <font>
         <Font name="Tahoma" size="14.0" />
       </font>
@@ -59,7 +59,7 @@
         <Font name="Tahoma" size="14.0" />
       </font>
     </Label>
-    <TextField fx:id="ipField" alignment="CENTER" layoutX="165.0" layoutY="132.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+    <TextField fx:id="ipField" layoutX="165.0" layoutY="132.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
       <font>
         <Font name="Tahoma" size="14.0" />
       </font>
@@ -69,7 +69,7 @@
         <Font name="Tahoma" size="14.0" />
       </font>
     </Label>
-    <TextField fx:id="hostNameField" alignment="CENTER" layoutX="165.0" layoutY="179.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+    <TextField fx:id="hostNameField" layoutX="165.0" layoutY="179.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
       <font>
         <Font name="Tahoma" size="14.0" />
       </font>

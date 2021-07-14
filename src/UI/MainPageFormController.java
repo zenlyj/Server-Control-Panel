@@ -37,7 +37,9 @@ public class MainPageFormController {
     @FXML
     private Button editButton;
     @FXML
-    private Button changeIDButton;
+    private Button changeIPButton;
+    @FXML
+    private Button renameButton;
     @FXML
     private Button remoteDesktopButton;
     @FXML
@@ -102,11 +104,23 @@ public class MainPageFormController {
     }
 
     @FXML
-    public void handleChangeID(Event e) {
+    public void handleChangeIP(Event e) {
         try {
             int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
             Stage stage = new Stage();
             stage.setScene(ChangeIPForm.getForm(app, selectedIndex));
+            stage.show();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    @FXML
+    public void handleRename(Event e) {
+        try {
+            int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
+            Stage stage = new Stage();
+            stage.setScene(ChangeNameForm.getForm(app, selectedIndex));
             stage.show();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
@@ -188,7 +202,7 @@ public class MainPageFormController {
         pingButton.setGraphic(new ImageView(ping));
         shutdownButton.setGraphic(new ImageView(shutdown));
         editButton.setGraphic(new ImageView(edit));
-        changeIDButton.setGraphic(new ImageView(changeID));
+        changeIPButton.setGraphic(new ImageView(changeID));
         remoteDesktopButton.setGraphic(new ImageView(remoteDesktop));
     }
 

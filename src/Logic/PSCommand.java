@@ -30,7 +30,7 @@ public class PSCommand {
     }
 
     public static String declareAdapterVar(String name, String connectionType) {
-        return String.format("$%1$s = Get-NetAdapter | %% { Process { If (( $_.Status -eq \"up\" ) -and ($_.Name -eq \"%2$s\") ){ $_.ifIndex } }}}", name, connectionType);
+        return String.format("$%1$s = Get-NetAdapter | %% { Process { If (( $_.Status -eq \"up\" ) -and ($_.Name -eq \"%2$s\") ){ $_.ifIndex } }}", name, connectionType);
     }
 
     public static String renameCommand(String newNameVar) {

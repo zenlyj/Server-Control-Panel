@@ -31,12 +31,11 @@ public class EditCommand extends Command {
         List<Server> servers = app.getServers();
         Server oldServer = servers.get(selectedIndex);
         Server updatedServer = new Server(ipAddress, serverName, userName, password);
-        boolean isModified = false;
-        isModified = (!ipAddress.equals(oldServer.getIpAddress())) ||
+        boolean isChanged = (!ipAddress.equals(oldServer.getIpAddress())) ||
                      (!serverName.equals(oldServer.getServerName())) ||
                      (!userName.equals(oldServer.getUserName())) ||
                      (!password.equals(oldServer.getPassword()));
-        if (isModified) {
+        if (isChanged) {
             // erase old server
             servers.set(selectedIndex, new Server("", "", "", ""));
             if (!servers.contains(updatedServer)) {

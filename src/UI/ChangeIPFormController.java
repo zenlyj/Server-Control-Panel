@@ -1,7 +1,6 @@
 package UI;
 
 import Logic.ChangeIPCommand;
-import Logic.Command;
 import Logic.Parser;
 import Logic.ParserException;
 import Model.App;
@@ -12,20 +11,17 @@ import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class ChangeIDFormController {
+public class ChangeIPFormController {
     private App app;
     private int selectedIndex;
     @FXML
     private TextField ipField;
-    @FXML
-    private TextField hostNameField;
 
     @FXML
     public void handleConfirm(Event e) {
         try {
-            String hostName = hostNameField.getText().strip();
             String ip = Parser.parseIPAddress(ipField.getText());
-            Command cmd = new ChangeIPCommand(app, selectedIndex, ip, hostName);
+            ChangeIPCommand cmd = new ChangeIPCommand(app, selectedIndex, ip);
             cmd.execute();
             Node source = (Node) e.getSource();
             Stage stage = (Stage) source.getScene().getWindow();
@@ -46,7 +42,6 @@ public class ChangeIDFormController {
         this.app = app;
         this.selectedIndex = selectedIndex;
         Server serverToEdit = app.getServers().get(selectedIndex);
-        this.hostNameField.setText(serverToEdit.getServerName());
         this.ipField.setText(serverToEdit.getIpAddress());
     }
 }
