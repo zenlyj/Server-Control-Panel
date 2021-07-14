@@ -194,7 +194,8 @@ public class MainPageFormController {
         Image ping = new Image(MainPageFormController.class.getResourceAsStream("/local-network.png"));
         Image shutdown = new Image(MainPageFormController.class.getResourceAsStream("/power.png"));
         Image edit = new Image(MainPageFormController.class.getResourceAsStream("/edit.png"));
-        Image changeID = new Image(MainPageFormController.class.getResourceAsStream("/remote-control.png"));
+        Image changeIP = new Image(MainPageFormController.class.getResourceAsStream("/remote-control.png"));
+        Image changeName = new Image(MainPageFormController.class.getResourceAsStream("/remote-control.png"));
         Image remoteDesktop = new Image(MainPageFormController.class.getResourceAsStream("/slide.png"));
 
         addButton.setGraphic(new ImageView(add));
@@ -202,7 +203,8 @@ public class MainPageFormController {
         pingButton.setGraphic(new ImageView(ping));
         shutdownButton.setGraphic(new ImageView(shutdown));
         editButton.setGraphic(new ImageView(edit));
-        changeIPButton.setGraphic(new ImageView(changeID));
+        changeIPButton.setGraphic(new ImageView(changeIP));
+        renameButton.setGraphic(new ImageView(changeName));
         remoteDesktopButton.setGraphic(new ImageView(remoteDesktop));
     }
 

@@ -80,10 +80,10 @@ public class ChangeIPCommand extends Command {
 
     private void changeIP(List<Server> updatedServers) {
         try (PowerShell powerShell = PowerShell.openSession()) {
-            powerShell.executeCommand(PSCommand.declareStringVar("updatedServerIP", lstToString(updatedServers)));
-            powerShell.executeCommand(PSCommand.setTrustedHosts("updatedServerIP"));
+//            powerShell.executeCommand(PSCommand.declareStringVar("updatedServerIP", lstToString(updatedServers)));
+//            powerShell.executeCommand(PSCommand.setTrustedHosts("updatedServerIP"));
             PowerShellResponse response = createSession(powerShell);
-            if (!response.getCommandOutput().isBlank()) {
+            if (response.getCommandOutput().isBlank()) {
                 powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.declareStringVar("newIPAddr", newIPAddress)));
                 powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.declareStringVar("oldIPAddr", server.getIpAddress())));
                 powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.declareAdapterVar("adapterIndex", "NIC1")));

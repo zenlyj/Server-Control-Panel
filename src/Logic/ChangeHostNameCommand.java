@@ -59,7 +59,8 @@ public class ChangeHostNameCommand extends Command {
     private void renameServer() {
         try (PowerShell powerShell = PowerShell.openSession()) {
             PowerShellResponse response = createSession(powerShell);
-            if (!response.getCommandOutput().isBlank()) {
+            System.out.println(response.getCommandOutput());
+            if (response.getCommandOutput().isBlank()) {
                 powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.declareStringVar("newServerName", newServerName)));
                 powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.renameCommand("newServerName")));
             } else {
