@@ -55,7 +55,6 @@ public class ShutdownCommand extends Command {
             powerShell.executeCommand(PSCommand.declareSecurePasswordVar("securePassword", "password"));
             powerShell.executeCommand(PSCommand.declareCredsVar("creds", "userName", "securePassword"));
             PowerShellResponse response = powerShell.configuration(myConfig).executeCommand(PSCommand.shutdownCommand("serverIP", "creds"));
-
             Platform.runLater(()->{
                 String commandResult = "";
                 if (!response.getCommandOutput().isBlank()) {

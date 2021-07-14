@@ -4,7 +4,6 @@ import Model.App;
 import Model.Server;
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellNotAvailableException;
-import com.profesorfalken.jpowershell.PowerShellResponse;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 
@@ -14,10 +13,8 @@ import java.util.Map;
 public class RemoteDesktopCommand extends Command {
     private App app;
     private Server server;
-    private final String remoteDesktopSuccessMessage = "Successfully established remote connection to %s!\n";
-    private final String remoteDesktopFailureMessage = "Failed to establish remote connection to %s, ensure that the correct credentials are provided\n";
     private final String offlineFailureMessage = "%s is offline! Aborting remote desktop operation\n";
-    private final String powershellUnavailableMessage = "Powershell is not available on this work station! Aborting shutdown operation...\n";
+    private final String powershellUnavailableMessage = "Powershell is not available on this work station! Aborting remote desktop operation...\n";
     private final String initRemoteDesktopMessage = "Initiated remote desktop connection to %s\n";
 
 
@@ -30,22 +27,8 @@ public class RemoteDesktopCommand extends Command {
         try (PowerShell powerShell = PowerShell.openSession()) {
             Map<String, String> myConfig = new HashMap<>();
             myConfig.put("maxWait", "90000");
-            powerShell.executeCommand(PSCommand.declareStringVar("serverIP", server.getIpAddress()));
-            powerShell.executeCommand(PSCommand.declareStringVar("userName", server.getUserName()));
-            powerShell.executeCommand(PSCommand.declareStringVar("password", server.getPassword()));
-            powerShell.executeCommand(PSCommand.cmdKey("serverIP", "userName", "password"));
-            PowerShellResponse response = powerShell.configuration(myConfig).executeCommand(PSCommand.mstscExec("serverIP"));
-
-            Platform.runLater(()->{
-                String commandResult = "";
-                if (!response.getCommandOutput().isBlank()) {
-                    // Show error message
-                    commandResult = String.format(remoteDesktopFailureMessage, server.getServerName());
-                } else {
-                    commandResult = String.format(remoteDesktopSuccessMessage, server.getServerName());
-                }
-                app.addHistory(commandResult);
-            });
+            powerShell.executeCommand(PSCommand.cmdKey(server.getIpAddress(), server.getUserName(), server.getPassword()));
+            powerShell.configuration(myConfig).executeCommand(PSCommand.mstscExec(server.getIpAddress()));
         } catch (PowerShellNotAvailableException ex) {
             Platform.runLater(()->{
                 app.addHistory(powershellUnavailableMessage);

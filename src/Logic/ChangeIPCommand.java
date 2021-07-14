@@ -55,6 +55,7 @@ public class ChangeIPCommand extends Command {
         for (Server s : servers) {
             res += s.getIpAddress() + ",";
         }
+        System.out.println(res.substring(0, res.length()-1));
         return res.substring(0, res.length()-1);
     }
 
@@ -63,6 +64,8 @@ public class ChangeIPCommand extends Command {
     }
 
     private PowerShellResponse createSession(PowerShell powerShell) {
+        powerShell.executeCommand(PSCommand.declareStringVar("allServerIP", lstToString(app.getServers())));
+        powerShell.executeCommand(PSCommand.setTrustedHosts("allServerIP"));
         powerShell.executeCommand(PSCommand.declareStringVar("serverIP", server.getIpAddress()));
         powerShell.executeCommand(PSCommand.declareStringVar("userName", server.getUserName()));
         powerShell.executeCommand(PSCommand.declareStringVar("password", server.getPassword()));
@@ -77,8 +80,8 @@ public class ChangeIPCommand extends Command {
     }
 
     private PowerShellResponse changeIP(PowerShell powerShell) {
-        powerShell.executeCommand(PSCommand.declareStringVar("allServerIP", lstToString(app.getServers())));
-        powerShell.executeCommand(PSCommand.setTrustedHosts("allServerIP"));
+//        powerShell.executeCommand(PSCommand.declareStringVar("allServerIP", lstToString(app.getServers())));
+//        powerShell.executeCommand(PSCommand.setTrustedHosts("allServerIP"));
         powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.declareStringVar("newIPAddr", newIPAddress)));
         powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.declareStringVar("oldIPAddr", server.getIpAddress())));
         powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.declareAdapterVar("adapterIndex", "NIC1")));
@@ -107,7 +110,8 @@ public class ChangeIPCommand extends Command {
 
     public void powerShellExec() {
         try (PowerShell powerShell = PowerShell.openSession()) {
-            createSession(powerShell);
+            PowerShellResponse res = createSession(powerShell);
+            System.out.println(res.getCommandOutput());
             renameServer(powerShell);
             boolean success = false;
             if (isIPChange()) {

@@ -2,7 +2,7 @@ package Logic;
 
 public class PSCommand {
     public static String declareStringVar(String name, String val) {
-        return String.format("$%1$s = %2$s", name, val);
+        return String.format("$%1$s = '%2$s'", name, val);
     }
 
     public static String declareSecurePasswordVar(String name, String passVar) {
@@ -46,10 +46,10 @@ public class PSCommand {
     }
 
     public static String cmdKey(String serverIPVar, String userNameVar, String passwordVar) {
-        return String.format("cmdkey /generic:TERMSRV/$%1$s /user:$%2$s /pass:$%3$s", serverIPVar, userNameVar, passwordVar);
+        return String.format("cmdkey /generic:TERMSRV/'%1$s' /user:'%2$s' /pass:'%3$s'", serverIPVar, userNameVar, passwordVar);
     }
 
     public static String mstscExec(String serverIPVar) {
-        return String.format("mstsc /v:$%s", serverIPVar);
+        return String.format("mstsc /v:%s", serverIPVar);
     }
 }
