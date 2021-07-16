@@ -1,6 +1,7 @@
 package UI;
 
 import Logic.DeleteCommand;
+import Logic.ImportCommand;
 import Logic.PingCommand;
 import Logic.RemoteDesktopCommand;
 import Logic.ShutdownCommand;
@@ -10,6 +11,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.ListChangeListener;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
@@ -19,8 +21,11 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +41,8 @@ public class MainPageFormController {
     private Button pingButton;
     @FXML
     private Button shutdownButton;
+    @FXML
+    private Button importButton;
     @FXML
     private Button editButton;
     @FXML
@@ -99,6 +106,18 @@ public class MainPageFormController {
             List<Server> serversToShutdown = (List<Server>) tableView.getSelectionModel().getSelectedItems();
             ShutdownCommand shutdownCommand = new ShutdownCommand(app, serversToShutdown);
             shutdownCommand.execute();
+        }
+    }
+
+    @FXML
+    public void handleImport(Event e) {
+        Node source = (Node) e.getSource();
+        Stage stage = (Stage) source.getScene().getWindow();
+        FileChooser fileChooser = new FileChooser();
+        File importFile = fileChooser.showOpenDialog(stage);
+        if (importFile != null) {
+            ImportCommand cmd = new ImportCommand(app, importFile);
+            cmd.execute();
         }
     }
 
@@ -228,6 +247,7 @@ public class MainPageFormController {
         Image changeIP = new Image(MainPageFormController.class.getResourceAsStream("/remote-control.png"));
         Image changeName = new Image(MainPageFormController.class.getResourceAsStream("/remote-control.png"));
         Image remoteDesktop = new Image(MainPageFormController.class.getResourceAsStream("/slide.png"));
+        Image massImport = new Image(MainPageFormController.class.getResourceAsStream("/import.png"));
 
         addButton.setGraphic(new ImageView(add));
         deleteButton.setGraphic(new ImageView(delete));
@@ -237,6 +257,7 @@ public class MainPageFormController {
         changeIPButton.setGraphic(new ImageView(changeIP));
         renameButton.setGraphic(new ImageView(changeName));
         remoteDesktopButton.setGraphic(new ImageView(remoteDesktop));
+        importButton.setGraphic(new ImageView(massImport));
     }
 
     public void init(App app) {
