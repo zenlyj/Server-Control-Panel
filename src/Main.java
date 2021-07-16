@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 public class Main extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
-        System.out.println(PSCommand.declareAdapterVar("ada", "NIC"));
         App app = new App();
         MainPage mainPage = new MainPage();
         primaryStage.setTitle("Server Manager");

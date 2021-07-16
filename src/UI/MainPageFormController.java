@@ -26,6 +26,8 @@ import java.util.List;
 
 public class MainPageFormController {
     private App app;
+    private final String noItemSelectedMessage = "There are currently no item(s) selected!\n";
+
     @FXML
     private Button addButton;
     @FXML
@@ -69,9 +71,12 @@ public class MainPageFormController {
     @FXML
     public void handleDelete(Event e) {
         try {
-            List<Server> serversToDelete = tableView.getSelectionModel().getSelectedItems();
-            DeleteCommand deleteCommand = new DeleteCommand(app, serversToDelete);
-            deleteCommand.execute();
+            boolean isSelected = selectionCheck();
+            if (isSelected) {
+                List<Server> serversToDelete = tableView.getSelectionModel().getSelectedItems();
+                DeleteCommand deleteCommand = new DeleteCommand(app, serversToDelete);
+                deleteCommand.execute();
+            }
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
@@ -79,25 +84,34 @@ public class MainPageFormController {
 
     @FXML
     public void handlePing(Event e) {
-        List<Integer> serverIndices = tableView.getSelectionModel().getSelectedIndices();
-        PingCommand pingCommand = new PingCommand(app, serverIndices);
-        pingCommand.execute();
+        boolean isSelected = selectionCheck();
+        if (isSelected) {
+            List<Integer> serverIndices = tableView.getSelectionModel().getSelectedIndices();
+            PingCommand pingCommand = new PingCommand(app, serverIndices);
+            pingCommand.execute();
+        }
     }
 
     @FXML
     public void handleShutdown(Event e) {
-        List<Server> serversToShutdown = (List<Server>) tableView.getSelectionModel().getSelectedItems();
-        ShutdownCommand shutdownCommand = new ShutdownCommand(app, serversToShutdown);
-        shutdownCommand.execute();
+        boolean isSelected = selectionCheck();
+        if (isSelected) {
+            List<Server> serversToShutdown = (List<Server>) tableView.getSelectionModel().getSelectedItems();
+            ShutdownCommand shutdownCommand = new ShutdownCommand(app, serversToShutdown);
+            shutdownCommand.execute();
+        }
     }
 
     @FXML
     public void handleEdit(Event e) {
         try {
-            int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
-            Stage stage = new Stage();
-            stage.setScene(EditForm.getForm(app, selectedIndex));
-            stage.show();
+            boolean isSelected = selectionCheck();
+            if (isSelected) {
+                int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
+                Stage stage = new Stage();
+                stage.setScene(EditForm.getForm(app, selectedIndex));
+                stage.show();
+            }
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
@@ -106,10 +120,13 @@ public class MainPageFormController {
     @FXML
     public void handleChangeIP(Event e) {
         try {
-            int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
-            Stage stage = new Stage();
-            stage.setScene(ChangeIPForm.getForm(app, selectedIndex));
-            stage.show();
+            boolean isSelected = selectionCheck();
+            if (isSelected) {
+                int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
+                Stage stage = new Stage();
+                stage.setScene(ChangeIPForm.getForm(app, selectedIndex));
+                stage.show();
+            }
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
@@ -118,10 +135,13 @@ public class MainPageFormController {
     @FXML
     public void handleRename(Event e) {
         try {
-            int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
-            Stage stage = new Stage();
-            stage.setScene(ChangeNameForm.getForm(app, selectedIndex));
-            stage.show();
+            boolean isSelected = selectionCheck();
+            if (isSelected) {
+                int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
+                Stage stage = new Stage();
+                stage.setScene(ChangeNameForm.getForm(app, selectedIndex));
+                stage.show();
+            }
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
@@ -129,9 +149,20 @@ public class MainPageFormController {
 
     @FXML
     public void handleRemoteDesktop(Event e) {
-        Server server = (Server) tableView.getSelectionModel().getSelectedItem();
-        RemoteDesktopCommand remoteDesktopCommand = new RemoteDesktopCommand(app, server);
-        remoteDesktopCommand.execute();
+        boolean isSelected = selectionCheck();
+        if (isSelected) {
+            Server server = (Server) tableView.getSelectionModel().getSelectedItem();
+            RemoteDesktopCommand remoteDesktopCommand = new RemoteDesktopCommand(app, server);
+            remoteDesktopCommand.execute();
+        }
+    }
+
+    private boolean selectionCheck() {
+        if (tableView.getSelectionModel().getSelectedItem() == null) {
+            app.addHistory(noItemSelectedMessage);
+            return false;
+        }
+        return true;
     }
 
     public void initTableView() {
