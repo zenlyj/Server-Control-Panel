@@ -52,4 +52,8 @@ public class PSCommand {
     public static String mstscExec(String serverIPVar) {
         return String.format("mstsc /v:%s", serverIPVar);
     }
+
+    public static String getUpTime() {
+        return "Get-CimInstance Win32_OperatingSystem | Select-Object LastBootUpTime";
+    }
 }

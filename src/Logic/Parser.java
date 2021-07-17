@@ -2,6 +2,7 @@ package Logic;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -52,5 +53,36 @@ public class Parser {
             throw new ParserException(fileNotFoundMessage);
         }
         return serversToAdd;
+    }
+
+    public static LocalDateTime parseDateTime(String dateTime) {
+        String[] tokens = dateTime.split(" ");
+        int year = 0;
+        int month = 0;
+        int day = 0;
+        int hour = 0;
+        int minute = 0;
+        int second = 0;
+        String yearInput = tokens[0];
+        String timeInput = tokens[1];
+        String timeFormInput = tokens[2];
+
+        String[] yearTokens = yearInput.split("/");
+        month = Integer.parseInt(yearTokens[0]);
+        day = Integer.parseInt(yearTokens[1]);
+        year = Integer.parseInt(yearTokens[2]);
+
+        String[] timeTokens = timeInput.split(":");
+        hour = Integer.parseInt(timeTokens[0]);
+        minute = Integer.parseInt(timeTokens[1]);
+        second = Integer.parseInt(timeTokens[2]);
+
+        if (hour == 12) {
+            hour = timeFormInput.equals("AM") ? 0 : hour;
+        } else {
+            hour = timeFormInput.equals("PM") ? hour+12 : hour;
+        }
+
+        return LocalDateTime.of(year, month, day, hour, minute, second);
     }
 }

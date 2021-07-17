@@ -1,10 +1,15 @@
 import Logic.PSCommand;
+import Logic.Parser;
 import Logic.SchedulePingCommand;
+import Logic.UpdateUptimeCommand;
 import Model.App;
 import UI.MainPage;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 public class Main extends Application{
@@ -18,6 +23,8 @@ public class Main extends Application{
         primaryStage.show();
         SchedulePingCommand schedulePing = new SchedulePingCommand(app);
         schedulePing.execute();
+        app.getServers().get(0).setBootDatetime(LocalDateTime.of(2021,7,16,12,12));
+//        System.out.println(app.getServers().get(0).getUpTime());
     }
 
     public static void main(String[] args) {

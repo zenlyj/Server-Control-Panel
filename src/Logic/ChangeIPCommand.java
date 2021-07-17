@@ -8,7 +8,6 @@ import com.profesorfalken.jpowershell.PowerShellResponse;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ChangeIPCommand extends Command {
@@ -41,10 +40,7 @@ public class ChangeIPCommand extends Command {
                 @Override
                 protected Void call() throws Exception {
                     if (isIPChangable()) {
-                        List<Server> updatedServers = lstDeepCopy(app.getServers());
-                        Server updatedServer = new Server(newIPAddress, server.getServerName(), server.getUserName(), server.getPassword());
-                        updatedServers.set(serverIdx, updatedServer);
-                        changeIP(updatedServers);
+                        changeIP();
                         updateMainApp();
                     } else {
                         showError();
@@ -78,10 +74,8 @@ public class ChangeIPCommand extends Command {
         return powerShell.executeCommand(PSCommand.declareSessionVar("s", "serverIP", "creds"));
     }
 
-    private void changeIP(List<Server> updatedServers) {
+    private void changeIP() {
         try (PowerShell powerShell = PowerShell.openSession()) {
-//            powerShell.executeCommand(PSCommand.declareStringVar("updatedServerIP", lstToString(updatedServers)));
-//            powerShell.executeCommand(PSCommand.setTrustedHosts("updatedServerIP"));
             PowerShellResponse response = createSession(powerShell);
             if (response.getCommandOutput().isBlank()) {
                 powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.declareStringVar("newIPAddr", newIPAddress)));
@@ -103,14 +97,6 @@ public class ChangeIPCommand extends Command {
             editCmd.execute();
             app.addHistory(String.format(changeIPSuccessMessage, server.getServerName(), server.getIpAddress(), newIPAddress));
         });
-    }
-
-    private List<Server> lstDeepCopy(List<Server> servers) {
-        List<Server> res = new ArrayList<>();
-        for (Server server : servers) {
-            res.add(new Server(server));
-        }
-        return res;
     }
 
     private boolean isIPChangable() {

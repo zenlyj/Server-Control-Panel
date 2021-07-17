@@ -3,6 +3,11 @@ package Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+
 public class Server {
     @JsonProperty("ipAddress")
     private String ipAddress;
@@ -16,6 +21,8 @@ public class Server {
     private boolean isOnline;
     @JsonIgnore
     private String status;
+    @JsonIgnore
+    private Optional<LocalDateTime> bootDateTime;
 
     public Server(@JsonProperty("ipAddress") String ipAddress, @JsonProperty("serverName") String serverName, @JsonProperty("userName") String userName, @JsonProperty("password") String password) {
         this.ipAddress = ipAddress;
@@ -24,6 +31,7 @@ public class Server {
         this.password = password;
         boolean isOnline = false;
         setStatus(isOnline);
+        this.bootDateTime = Optional.empty();
     }
 
     public Server(Server server) {
@@ -33,6 +41,7 @@ public class Server {
         this.password = server.getPassword();
         this.isOnline = server.getIsOnline();
         this.status = server.getStatus();
+        this.bootDateTime = server.getBootDateTime();
     }
 
     public String getIpAddress() {
@@ -63,6 +72,35 @@ public class Server {
     // used for tableview
     public String getStatus() {
         return status;
+    }
+
+    public void setBootDatetime(LocalDateTime bootDateTime) {
+        this.bootDateTime = Optional.of(bootDateTime);
+    }
+
+    public Optional<LocalDateTime> getBootDateTime() {
+        return this.bootDateTime;
+    }
+
+    public String upTime() {
+        long days = 0;
+        long hours = 0;
+        long minutes = 0;
+        long seconds = 0;
+
+        if (bootDateTime.isPresent()) {
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            Duration duration = Duration.between(bootDateTime.get(), currentDateTime);
+            long uptime = duration.toSeconds();
+            days = TimeUnit.SECONDS.toDays(uptime);
+            uptime -= TimeUnit.DAYS.toSeconds(days);
+            hours = TimeUnit.SECONDS.toHours(uptime);
+            uptime -= TimeUnit.HOURS.toSeconds(hours);
+            minutes = TimeUnit.SECONDS.toMinutes(uptime);
+            uptime -= TimeUnit.MINUTES.toSeconds(minutes);
+            seconds = TimeUnit.SECONDS.toSeconds(uptime);
+        }
+        return String.format("%1$s days %2$s hours %3$s minutes %4$s seconds", days, hours, minutes, seconds);
     }
 
     @Override

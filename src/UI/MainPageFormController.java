@@ -7,8 +7,11 @@ import Logic.RemoteDesktopCommand;
 import Logic.ShutdownCommand;
 import Model.App;
 import Model.Server;
+import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ListChangeListener;
+import javafx.concurrent.ScheduledService;
+import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -21,16 +24,18 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MainPageFormController {
     private App app;
+    private Optional<Server> serverToShowTime = Optional.empty();
     private final String noItemSelectedMessage = "There are currently no item(s) selected!\n";
 
     @FXML
@@ -59,6 +64,8 @@ public class MainPageFormController {
     private Label serverNameDetails;
     @FXML
     private Label ipDetails;
+    @FXML
+    private Label uptime;
     @FXML
     private TextArea historyBox;
     @FXML
@@ -236,6 +243,7 @@ public class MainPageFormController {
         passwordDetails.setText("Password: " + newSelection.getPassword());
         serverNameDetails.setText("Server name: " + newSelection.getServerName());
         ipDetails.setText("IP Address: " + newSelection.getIpAddress());
+        serverToShowTime = Optional.of(newSelection);
     }
 
     private void initButtons() {
@@ -266,5 +274,21 @@ public class MainPageFormController {
         initHistoryBox();
         initServerDetails();
         initTableView();
+        ScheduledService<Void> service = new ScheduledService<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        if (serverToShowTime.isPresent()) {
+                            Platform.runLater(() -> uptime.setText("Uptime: " + serverToShowTime.get().upTime()));
+                        }
+                        return null;
+                    }
+                };
+            }
+        };
+        service.setPeriod(Duration.seconds(1));
+        service.start();
     }
 }
