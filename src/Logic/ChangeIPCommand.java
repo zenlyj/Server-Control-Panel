@@ -21,6 +21,7 @@ public class ChangeIPCommand extends Command {
     private final String offlineFailureMessage = "%s is offline! Aborting change ip operation...\n";
     private final String initChangeMessage = "Initiated ip address change for %s\n";
     private final String changeIPFailureMessage = "Failed to change IP for %s, check that the current servers do not have the input IP address\n";
+    private final String inChangeFailureMessage = "%s is currently being shut down or is undergoing IP/name change. Try again later!\n";
 
     public ChangeIPCommand(App app, int serverIdx, String newIPAddress) {
         this.app = app;
@@ -29,22 +30,15 @@ public class ChangeIPCommand extends Command {
         this.newIPAddress = newIPAddress;
     }
 
-    private void showError() {
-        Platform.runLater(() -> app.addHistory(String.format(changeIPFailureMessage, server.getServerName())));
-    }
-
     @Override
     public void execute() {
-        if (server.getIsOnline()) {
+        if (isIPChangable()) {
+            app.setServerInChange(server);
             Task task = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
-                    if (isIPChangable()) {
-                        changeIP();
-                        updateMainApp();
-                    } else {
-                        showError();
-                    }
+                    changeIP();
+                    updateMainApp();
                     return null;
                 }
             };
@@ -96,14 +90,27 @@ public class ChangeIPCommand extends Command {
             EditCommand editCmd = new EditCommand(app, serverIdx, server.getUserName(), server.getPassword(), server.getServerName(), newIPAddress);
             editCmd.execute();
             app.addHistory(String.format(changeIPSuccessMessage, server.getServerName(), server.getIpAddress(), newIPAddress));
+            app.removeServerInChange(server);
         });
     }
 
     private boolean isIPChangable() {
+        boolean isDuplicate = false;
         for (Server server : app.getServers()) {
-            boolean isDuplicate = server.getIpAddress().equals(newIPAddress);
-            if (isDuplicate) return false;
+            isDuplicate = server.getIpAddress().equals(newIPAddress);
+            if (isDuplicate) break;
         }
-        return true;
+        if (isDuplicate) {
+            Platform.runLater(()->app.addHistory(String.format(changeIPFailureMessage, server.getServerName())));
+            return false;
+        } else if (!server.getIsOnline()) {
+            Platform.runLater(()->app.addHistory(String.format(offlineFailureMessage, server.getServerName())));
+            return false;
+        } else if (app.isServerInChange(server)) {
+            Platform.runLater(()->app.addHistory(String.format(inChangeFailureMessage, server.getServerName())));
+            return false;
+        } else {
+            return true;
+        }
     }
 }

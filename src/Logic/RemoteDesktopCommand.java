@@ -17,7 +17,6 @@ public class RemoteDesktopCommand extends Command {
     private final String powershellUnavailableMessage = "Powershell is not available on this work station! Aborting remote desktop operation...\n";
     private final String initRemoteDesktopMessage = "Initiated remote desktop connection to %s\n";
 
-
     public RemoteDesktopCommand(App app, Server server) {
         this.app = app;
         this.server = server;

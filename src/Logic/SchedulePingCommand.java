@@ -12,6 +12,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class SchedulePingCommand extends Command {
     private App app;
@@ -42,6 +43,14 @@ public class SchedulePingCommand extends Command {
                 app.addHistory(String.format(networkErrorMessage, server.getServerName()));
             } catch (IllegalArgumentException e) {
                 // will never have a negative timeout
+            }
+            if (server.getIsOnline() && !isOnline) {
+                // server goes offline
+                server.setBootDatetime(null);
+            }
+            if (!server.getIsOnline() && isOnline) {
+                // server boot up
+                new UpdateUptimeCommand(app, server).execute();
             }
             server.setStatus(isOnline);
         }

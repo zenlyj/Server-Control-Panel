@@ -17,6 +17,7 @@ public class App {
     private ObservableList<Server> servers;
     private Set<Integer> serversInEdit;
     private LinkedList<Server> serversInDelete;
+    private LinkedList<Server> serversInChange;
     private Storage db;
     private StringProperty history;
     private DateTimeFormatter timeFormatter;
@@ -27,6 +28,7 @@ public class App {
         servers = FXCollections.observableList(retrieved);
         serversInEdit = new HashSet<>();
         serversInDelete = new LinkedList<>();
+        serversInChange = new LinkedList<>();
         history = new SimpleStringProperty();
         timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
     }
@@ -67,11 +69,23 @@ public class App {
         this.serversInDelete.remove(serverInDelete);
     }
 
+    public void setServerInChange(Server serverInChange) {
+        this.serversInChange.add(serverInChange);
+    }
+
+    public void removeServerInChange(Server serverInChange) {
+        this.serversInChange.remove(serverInChange);
+    }
+
     public boolean isServerInEdit(int serverIndex) {
         return this.serversInEdit.contains(serverIndex);
     }
 
     public boolean isServerInDelete(Server server) {
         return this.serversInDelete.contains(server);
+    }
+
+    public boolean isServerInChange(Server server) {
+        return this.serversInChange.contains(server);
     }
 }

@@ -229,21 +229,24 @@ public class MainPageFormController {
     public void initServerDetails() {
         TableView.TableViewSelectionModel<Server> selectionModel = tableView.getSelectionModel();
         selectionModel.selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            setServerInfo(newSelection);
+            setServerInfo(Optional.ofNullable(newSelection));
         });
     }
 
-    private void setServerInfo(Server newSelection) {
-        userNameDetails.setText("");
-        passwordDetails.setText("");
-        serverNameDetails.setText("");
-        ipDetails.setText("");
-        if (newSelection == null) return;
-        userNameDetails.setText("User name: " + newSelection.getUserName());
-        passwordDetails.setText("Password: " + newSelection.getPassword());
-        serverNameDetails.setText("Server name: " + newSelection.getServerName());
-        ipDetails.setText("IP Address: " + newSelection.getIpAddress());
-        serverToShowTime = Optional.of(newSelection);
+    private void setServerInfo(Optional<Server> newSelection) {
+        if (newSelection.isEmpty()) {
+            userNameDetails.setText("");
+            passwordDetails.setText("");
+            serverNameDetails.setText("");
+            ipDetails.setText("");
+            serverToShowTime = Optional.empty();
+        } else {
+            userNameDetails.setText(String.format("User name: %s", newSelection.get().getUserName()));
+            passwordDetails.setText(String.format("Password: %s", newSelection.get().getPassword()));
+            serverNameDetails.setText(String.format("Server name: %s", newSelection.get().getServerName()));
+            ipDetails.setText(String.format("IP Address: %s", newSelection.get().getIpAddress()));
+            serverToShowTime = newSelection;
+        }
     }
 
     private void initButtons() {
@@ -282,6 +285,8 @@ public class MainPageFormController {
                     protected Void call() throws Exception {
                         if (serverToShowTime.isPresent()) {
                             Platform.runLater(() -> uptime.setText("Uptime: " + serverToShowTime.get().upTime()));
+                        } else {
+                            Platform.runLater(() -> uptime.setText(""));
                         }
                         return null;
                     }

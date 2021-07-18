@@ -21,6 +21,7 @@ public class ChangeHostNameCommand extends Command {
     private final String initChangeMessage = "Initiated name change for %s\n";
     private final String changeNameSuccessMessage = "%1$s successfully renamed to %2$s\n";
     private final String changeNameFailureMessage = "Failed to rename %s, check that there are no existing servers with the same name\n";
+    private final String inChangeFailureMessage = "%s is currently being shut down or is undergoing IP/name change. Try again later!\n";
 
     public ChangeHostNameCommand(App app, int serverIdx, String newServerName) {
         this.app = app;
@@ -30,11 +31,23 @@ public class ChangeHostNameCommand extends Command {
     }
 
     private boolean isRenamable() {
+        boolean isDuplicate = false;
         for (Server server : app.getServers()) {
-            boolean isDuplicate = server.getServerName().equals(newServerName);
-            if (isDuplicate) return false;
+            isDuplicate = server.getServerName().equals(newServerName);
+            if (isDuplicate) break;
         }
-        return true;
+        if (isDuplicate) {
+            Platform.runLater(()->app.addHistory(String.format(changeNameFailureMessage, server.getServerName())));
+            return false;
+        } else if (server.getIsOnline()) {
+            Platform.runLater(()->app.addHistory(String.format(offlineFailureMessage, server.getServerName())));
+            return false;
+        } else if (app.isServerInChange(server)) {
+            Platform.runLater(()->app.addHistory(String.format(inChangeFailureMessage, server.getServerName())));
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private String lstToString(List<Server> servers) {
@@ -75,25 +88,19 @@ public class ChangeHostNameCommand extends Command {
             EditCommand editCmd = new EditCommand(app, serverIdx, server.getUserName(), server.getPassword(), newServerName, server.getIpAddress());
             editCmd.execute();
             app.addHistory(String.format(changeNameSuccessMessage, server.getServerName(), newServerName));
+            app.removeServerInChange(server);
         });
-    }
-
-    private void showError() {
-        Platform.runLater(() -> app.addHistory(String.format(changeNameFailureMessage, server.getServerName())));
     }
 
     @Override
     public void execute() {
-        if (server.getIsOnline()) {
+        if (isRenamable()) {
+            app.setServerInChange(server);
             Task task = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
-                    if (isRenamable()) {
-                        renameServer();
-                        updateMainApp();
-                    } else {
-                        showError();
-                    }
+                    renameServer();
+                    updateMainApp();
                     return null;
                 }
             };
