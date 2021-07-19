@@ -35,7 +35,7 @@ import java.util.Optional;
 
 public class MainPageFormController {
     private App app;
-    private Optional<Server> serverToShowTime = Optional.empty();
+    private Server serverToShowTime;
     private final String noItemSelectedMessage = "There are currently no item(s) selected!\n";
 
     @FXML
@@ -69,10 +69,12 @@ public class MainPageFormController {
     @FXML
     private TextArea historyBox;
     @FXML
-    private TableView tableView;
+    private TableView<Server> tableView;
+
+    private final TableView.TableViewSelectionModel<Server> selectionModel = tableView.getSelectionModel();
 
     @FXML
-    public void handleAdd(Event e) {
+    public void handleAdd() {
         try {
             Stage stage = new Stage();
             stage.setScene(AddForm.getForm(app));
@@ -83,11 +85,11 @@ public class MainPageFormController {
     }
 
     @FXML
-    public void handleDelete(Event e) {
+    public void handleDelete() {
         try {
             boolean isSelected = selectionCheck();
             if (isSelected) {
-                List<Server> serversToDelete = tableView.getSelectionModel().getSelectedItems();
+                List<Server> serversToDelete = selectionModel.getSelectedItems();
                 DeleteCommand deleteCommand = new DeleteCommand(app, serversToDelete);
                 deleteCommand.execute();
             }
@@ -97,20 +99,20 @@ public class MainPageFormController {
     }
 
     @FXML
-    public void handlePing(Event e) {
+    public void handlePing() {
         boolean isSelected = selectionCheck();
         if (isSelected) {
-            List<Integer> serverIndices = tableView.getSelectionModel().getSelectedIndices();
+            List<Integer> serverIndices = selectionModel.getSelectedIndices();
             PingCommand pingCommand = new PingCommand(app, serverIndices);
             pingCommand.execute();
         }
     }
 
     @FXML
-    public void handleShutdown(Event e) {
+    public void handleShutdown() {
         boolean isSelected = selectionCheck();
         if (isSelected) {
-            List<Server> serversToShutdown = (List<Server>) tableView.getSelectionModel().getSelectedItems();
+            List<Server> serversToShutdown = selectionModel.getSelectedItems();
             ShutdownCommand shutdownCommand = new ShutdownCommand(app, serversToShutdown);
             shutdownCommand.execute();
         }
@@ -129,11 +131,11 @@ public class MainPageFormController {
     }
 
     @FXML
-    public void handleEdit(Event e) {
+    public void handleEdit() {
         try {
             boolean isSelected = selectionCheck();
             if (isSelected) {
-                int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
+                int selectedIndex = selectionModel.getSelectedIndex();
                 Stage stage = new Stage();
                 stage.setScene(EditForm.getForm(app, selectedIndex));
                 stage.show();
@@ -144,11 +146,11 @@ public class MainPageFormController {
     }
 
     @FXML
-    public void handleChangeIP(Event e) {
+    public void handleChangeIP() {
         try {
             boolean isSelected = selectionCheck();
             if (isSelected) {
-                int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
+                int selectedIndex = selectionModel.getSelectedIndex();
                 Stage stage = new Stage();
                 stage.setScene(ChangeIPForm.getForm(app, selectedIndex));
                 stage.show();
@@ -159,11 +161,11 @@ public class MainPageFormController {
     }
 
     @FXML
-    public void handleRename(Event e) {
+    public void handleRename() {
         try {
             boolean isSelected = selectionCheck();
             if (isSelected) {
-                int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
+                int selectedIndex = selectionModel.getSelectedIndex();
                 Stage stage = new Stage();
                 stage.setScene(ChangeNameForm.getForm(app, selectedIndex));
                 stage.show();
@@ -174,17 +176,17 @@ public class MainPageFormController {
     }
 
     @FXML
-    public void handleRemoteDesktop(Event e) {
+    public void handleRemoteDesktop() {
         boolean isSelected = selectionCheck();
         if (isSelected) {
-            Server server = (Server) tableView.getSelectionModel().getSelectedItem();
+            Server server = selectionModel.getSelectedItem();
             RemoteDesktopCommand remoteDesktopCommand = new RemoteDesktopCommand(app, server);
             remoteDesktopCommand.execute();
         }
     }
 
     private boolean selectionCheck() {
-        if (tableView.getSelectionModel().getSelectedItem() == null) {
+        if (selectionModel.getSelectedItem() == null) {
             app.addHistory(noItemSelectedMessage);
             return false;
         }
@@ -192,7 +194,6 @@ public class MainPageFormController {
     }
 
     public void initTableView() {
-        TableView.TableViewSelectionModel<Server> selectionModel = tableView.getSelectionModel();
         selectionModel.setSelectionMode(SelectionMode.MULTIPLE);
         tableView.setStyle("-fx-font-size: 14; fx-font-family: Tahoma");
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -203,17 +204,15 @@ public class MainPageFormController {
         tableView.getColumns().add(column1);
         tableView.getColumns().add(column2);
         setTableData(app.getServers());
-        app.getServers().addListener((ListChangeListener) change -> setTableData(app.getServers()));
+        app.getServers().addListener((ListChangeListener<Server>) change -> setTableData(app.getServers()));
     }
 
     private void setTableData(List<Server> servers) {
-        List<Integer> selectedIndices = new ArrayList<>(tableView.getSelectionModel().getSelectedIndices());
+        List<Integer> selectedIndices = new ArrayList<>(selectionModel.getSelectedIndices());
         tableView.getItems().clear();
-        servers.forEach(server -> {
-            tableView.getItems().add(server);
-        });
+        servers.forEach(server -> tableView.getItems().add(server));
         for (Integer i : selectedIndices) {
-            tableView.getSelectionModel().select(i.intValue());
+            selectionModel.select(i);
         }
     }
 
@@ -227,24 +226,21 @@ public class MainPageFormController {
     }
 
     public void initServerDetails() {
-        TableView.TableViewSelectionModel<Server> selectionModel = tableView.getSelectionModel();
-        selectionModel.selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            setServerInfo(Optional.ofNullable(newSelection));
-        });
+        selectionModel.selectedItemProperty().addListener((obs, oldSelection, newSelection) -> setServerInfo(newSelection));
     }
 
-    private void setServerInfo(Optional<Server> newSelection) {
-        if (newSelection.isEmpty()) {
+    private void setServerInfo(Server newSelection) {
+        if (Optional.ofNullable(newSelection).isEmpty()) {
             userNameDetails.setText("");
             passwordDetails.setText("");
             serverNameDetails.setText("");
             ipDetails.setText("");
-            serverToShowTime = Optional.empty();
+            serverToShowTime = null;
         } else {
-            userNameDetails.setText(String.format("User name: %s", newSelection.get().getUserName()));
-            passwordDetails.setText(String.format("Password: %s", newSelection.get().getPassword()));
-            serverNameDetails.setText(String.format("Server name: %s", newSelection.get().getServerName()));
-            ipDetails.setText(String.format("IP Address: %s", newSelection.get().getIpAddress()));
+            userNameDetails.setText(String.format("User name: %s", newSelection.getUserName()));
+            passwordDetails.setText(String.format("Password: %s", newSelection.getPassword()));
+            serverNameDetails.setText(String.format("Server name: %s", newSelection.getServerName()));
+            ipDetails.setText(String.format("IP Address: %s", newSelection.getIpAddress()));
             serverToShowTime = newSelection;
         }
     }
@@ -277,14 +273,14 @@ public class MainPageFormController {
         initHistoryBox();
         initServerDetails();
         initTableView();
-        ScheduledService<Void> service = new ScheduledService<Void>() {
+        ScheduledService<Void> service = new ScheduledService<>() {
             @Override
             protected Task<Void> createTask() {
-                return new Task<Void>() {
+                return new Task<>() {
                     @Override
-                    protected Void call() throws Exception {
-                        if (serverToShowTime.isPresent()) {
-                            Platform.runLater(() -> uptime.setText(String.format("Uptime: %s", serverToShowTime.get().upTime())));
+                    protected Void call() {
+                        if (Optional.ofNullable(serverToShowTime).isPresent()) {
+                            Platform.runLater(() -> uptime.setText(String.format("Uptime: %s", serverToShowTime.upTime())));
                         } else {
                             Platform.runLater(() -> uptime.setText(""));
                         }
