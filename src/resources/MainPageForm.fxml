@@ -11,8 +11,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<GridPane alignment="CENTER_LEFT" hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" vgap="10.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.MainPageFormController">
+<GridPane alignment="CENTER_LEFT" hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" vgap="10.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.MainPageFormController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -28,43 +29,88 @@
     <children>
         <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
             <children>
-                <TextArea fx:id="historyBox" prefHeight="132.0" prefWidth="780.0" />
+                <TextArea fx:id="historyBox" prefHeight="182.0" prefWidth="980.0">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font></TextArea>
             </children>
         </HBox>
         <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowSpan="2">
             <children>
                 <ToolBar prefHeight="40.0" prefWidth="226.0">
                     <items>
-                        <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAdd" text="Add" />
-                        <Button fx:id="deleteButton" layoutX="10.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleDelete" text="Delete" />
-                        <Button fx:id="pingButton" layoutX="52.0" layoutY="13.0" mnemonicParsing="false" onAction="#handlePing" text="Ping" />
-                        <Button fx:id="shutdownButton" layoutX="107.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleShutdown" text="Shutdown" />
-                  <Button fx:id="importButton" layoutX="151.0" layoutY="12.0" mnemonicParsing="false" onAction="#handleImport" text="Import" />
+                        <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAdd" text="Add">
+                     <font>
+                        <Font name="Tahoma" size="14.0" />
+                     </font></Button>
+                        <Button fx:id="deleteButton" layoutX="10.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleDelete" text="Delete">
+                     <font>
+                        <Font name="Tahoma" size="14.0" />
+                     </font></Button>
+                        <Button fx:id="pingButton" layoutX="52.0" layoutY="13.0" mnemonicParsing="false" onAction="#handlePing" text="Ping">
+                     <font>
+                        <Font name="Tahoma" size="14.0" />
+                     </font></Button>
+                        <Button fx:id="shutdownButton" layoutX="107.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleShutdown" text="Shutdown">
+                     <font>
+                        <Font name="Tahoma" size="14.0" />
+                     </font></Button>
+                  <Button fx:id="importButton" layoutX="151.0" layoutY="12.0" mnemonicParsing="false" onAction="#handleImport" text="Import">
+                     <font>
+                        <Font name="Tahoma" size="14.0" />
+                     </font></Button>
                     </items>
                 </ToolBar>
-                <TableView fx:id="tableView" prefHeight="415.0" prefWidth="385.0" />
+                <TableView fx:id="tableView" prefHeight="501.0" prefWidth="485.0" />
             </children>
         </VBox>
         <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowSpan="2">
             <children>
                 <ToolBar prefHeight="40.0" prefWidth="249.0">
                     <items>
-                        <Button fx:id="editButton" mnemonicParsing="false" onAction="#handleEdit" text="Edit" />
-                        <Button fx:id="changeIPButton" layoutX="10.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleChangeIP" text="Change IP" />
-                  <Button fx:id="renameButton" layoutX="51.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleRename" text="Rename" />
-                        <Button fx:id="remoteDesktopButton" layoutX="51.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleRemoteDesktop" text="Remote Desktop" />
+                        <Button fx:id="editButton" mnemonicParsing="false" onAction="#handleEdit" text="Edit">
+                     <font>
+                        <Font name="Tahoma" size="14.0" />
+                     </font></Button>
+                        <Button fx:id="changeIPButton" layoutX="10.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleChangeIP" text="Change IP">
+                     <font>
+                        <Font name="Tahoma" size="14.0" />
+                     </font></Button>
+                  <Button fx:id="renameButton" layoutX="51.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleRename" text="Rename">
+                     <font>
+                        <Font name="Tahoma" size="14.0" />
+                     </font></Button>
+                        <Button fx:id="remoteDesktopButton" layoutX="51.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleRemoteDesktop" text="Remote Desktop">
+                     <font>
+                        <Font name="Tahoma" size="14.0" />
+                     </font></Button>
                     </items>
                 </ToolBar>
-                <VBox prefHeight="415.0" prefWidth="385.0" spacing="30.0">
+                <VBox prefHeight="501.0" prefWidth="485.0" spacing="40.0">
                     <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
                     </padding>
                     <children>
-                        <Label fx:id="userNameDetails" prefHeight="20.0" prefWidth="275.0" />
-                        <Label fx:id="passwordDetails" prefHeight="20.0" prefWidth="275.0" />
-                        <Label fx:id="serverNameDetails" prefHeight="20.0" prefWidth="275.0" />
-                        <Label fx:id="ipDetails" prefHeight="20.0" prefWidth="275.0" />
-                  <Label fx:id="uptime" layoutX="30.0" layoutY="180.0" prefHeight="20.0" prefWidth="275.0" />
+                        <Label fx:id="userNameDetails" prefHeight="20.0" prefWidth="345.0">
+                     <font>
+                        <Font name="Tahoma" size="14.0" />
+                     </font></Label>
+                        <Label fx:id="passwordDetails" prefHeight="20.0" prefWidth="345.0">
+                     <font>
+                        <Font name="Tahoma" size="14.0" />
+                     </font></Label>
+                        <Label fx:id="serverNameDetails" prefHeight="20.0" prefWidth="345.0">
+                     <font>
+                        <Font name="Tahoma" size="14.0" />
+                     </font></Label>
+                        <Label fx:id="ipDetails" prefHeight="20.0" prefWidth="345.0">
+                     <font>
+                        <Font name="Tahoma" size="14.0" />
+                     </font></Label>
+                  <Label fx:id="uptime" layoutX="30.0" layoutY="180.0" prefHeight="20.0" prefWidth="345.0">
+                     <font>
+                        <Font name="Tahoma" size="14.0" />
+                     </font></Label>
                     </children>
                 </VBox>
             </children>

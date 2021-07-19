@@ -76,8 +76,14 @@
       </TextField>
       <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
          <children>
-            <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#handleConfirm" text="Confirm" />
-            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
+            <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#handleConfirm" text="Confirm">
+               <font>
+                  <Font name="Tahoma" size="12.0" />
+               </font></Button>
+            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancel" text="Cancel">
+               <font>
+                  <Font name="Tahoma" size="12.0" />
+               </font></Button>
          </children>
       </HBox>
    </children>

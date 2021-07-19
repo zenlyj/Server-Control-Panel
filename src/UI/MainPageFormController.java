@@ -194,7 +194,7 @@ public class MainPageFormController {
     public void initTableView() {
         TableView.TableViewSelectionModel<Server> selectionModel = tableView.getSelectionModel();
         selectionModel.setSelectionMode(SelectionMode.MULTIPLE);
-
+        tableView.setStyle("-fx-font-size: 14; fx-font-family: Tahoma");
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         TableColumn<Server, String> column1 = new TableColumn<>("Server Name");
         column1.setCellValueFactory(new PropertyValueFactory<>("serverName"));
