@@ -66,7 +66,6 @@ public class UpdateUptimeCommand extends Command {
             protected Void call() throws Exception {
                 Optional<String> info = powerShellExec();
                 if (info.isPresent()) {
-                    System.out.println(info.get());
                     String bootDateTime = info.get().split("\n")[3];
                     Platform.runLater(() -> {
                         for (Server s : app.getServers()) {

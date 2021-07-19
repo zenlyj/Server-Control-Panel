@@ -75,7 +75,6 @@ public class Server {
     }
 
     public void setBootDatetime(LocalDateTime bootDateTime) {
-        System.out.println(bootDateTime);
         this.bootDateTime = Optional.ofNullable(bootDateTime);
     }
 
