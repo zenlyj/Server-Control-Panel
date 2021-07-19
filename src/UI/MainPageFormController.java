@@ -71,8 +71,6 @@ public class MainPageFormController {
     @FXML
     private TableView<Server> tableView;
 
-    private final TableView.TableViewSelectionModel<Server> selectionModel = tableView.getSelectionModel();
-
     @FXML
     public void handleAdd() {
         try {
@@ -86,20 +84,18 @@ public class MainPageFormController {
 
     @FXML
     public void handleDelete() {
-        try {
-            boolean isSelected = selectionCheck();
-            if (isSelected) {
-                List<Server> serversToDelete = selectionModel.getSelectedItems();
-                DeleteCommand deleteCommand = new DeleteCommand(app, serversToDelete);
-                deleteCommand.execute();
-            }
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+        TableView.TableViewSelectionModel<Server> selectionModel = tableView.getSelectionModel();
+        boolean isSelected = selectionCheck();
+        if (isSelected) {
+            List<Server> serversToDelete = selectionModel.getSelectedItems();
+            DeleteCommand deleteCommand = new DeleteCommand(app, serversToDelete);
+            deleteCommand.execute();
         }
     }
 
     @FXML
     public void handlePing() {
+        TableView.TableViewSelectionModel<Server> selectionModel = tableView.getSelectionModel();
         boolean isSelected = selectionCheck();
         if (isSelected) {
             List<Integer> serverIndices = selectionModel.getSelectedIndices();
@@ -110,6 +106,7 @@ public class MainPageFormController {
 
     @FXML
     public void handleShutdown() {
+        TableView.TableViewSelectionModel<Server> selectionModel = tableView.getSelectionModel();
         boolean isSelected = selectionCheck();
         if (isSelected) {
             List<Server> serversToShutdown = selectionModel.getSelectedItems();
@@ -134,6 +131,7 @@ public class MainPageFormController {
     public void handleEdit() {
         try {
             boolean isSelected = selectionCheck();
+            TableView.TableViewSelectionModel<Server> selectionModel = tableView.getSelectionModel();
             if (isSelected) {
                 int selectedIndex = selectionModel.getSelectedIndex();
                 Stage stage = new Stage();
@@ -149,6 +147,7 @@ public class MainPageFormController {
     public void handleChangeIP() {
         try {
             boolean isSelected = selectionCheck();
+            TableView.TableViewSelectionModel<Server> selectionModel = tableView.getSelectionModel();
             if (isSelected) {
                 int selectedIndex = selectionModel.getSelectedIndex();
                 Stage stage = new Stage();
@@ -164,6 +163,7 @@ public class MainPageFormController {
     public void handleRename() {
         try {
             boolean isSelected = selectionCheck();
+            TableView.TableViewSelectionModel<Server> selectionModel = tableView.getSelectionModel();
             if (isSelected) {
                 int selectedIndex = selectionModel.getSelectedIndex();
                 Stage stage = new Stage();
@@ -178,6 +178,7 @@ public class MainPageFormController {
     @FXML
     public void handleRemoteDesktop() {
         boolean isSelected = selectionCheck();
+        TableView.TableViewSelectionModel<Server> selectionModel = tableView.getSelectionModel();
         if (isSelected) {
             Server server = selectionModel.getSelectedItem();
             RemoteDesktopCommand remoteDesktopCommand = new RemoteDesktopCommand(app, server);
@@ -186,6 +187,7 @@ public class MainPageFormController {
     }
 
     private boolean selectionCheck() {
+        TableView.TableViewSelectionModel<Server> selectionModel = tableView.getSelectionModel();
         if (selectionModel.getSelectedItem() == null) {
             app.addHistory(noItemSelectedMessage);
             return false;
@@ -194,6 +196,7 @@ public class MainPageFormController {
     }
 
     public void initTableView() {
+        TableView.TableViewSelectionModel<Server> selectionModel = tableView.getSelectionModel();
         selectionModel.setSelectionMode(SelectionMode.MULTIPLE);
         tableView.setStyle("-fx-font-size: 14; fx-font-family: Tahoma");
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -208,6 +211,7 @@ public class MainPageFormController {
     }
 
     private void setTableData(List<Server> servers) {
+        TableView.TableViewSelectionModel<Server> selectionModel = tableView.getSelectionModel();
         List<Integer> selectedIndices = new ArrayList<>(selectionModel.getSelectedIndices());
         tableView.getItems().clear();
         servers.forEach(server -> tableView.getItems().add(server));
@@ -226,6 +230,7 @@ public class MainPageFormController {
     }
 
     public void initServerDetails() {
+        TableView.TableViewSelectionModel<Server> selectionModel = tableView.getSelectionModel();
         selectionModel.selectedItemProperty().addListener((obs, oldSelection, newSelection) -> setServerInfo(newSelection));
     }
 
