@@ -44,8 +44,6 @@ public class ChangeIPCommand extends Command {
             };
             new Thread(task).start();
             app.addHistory(String.format(initChangeMessage, server.getServerName()));
-        } else {
-            app.addHistory(String.format(offlineFailureMessage, server.getServerName()));
         }
     }
 
@@ -87,8 +85,10 @@ public class ChangeIPCommand extends Command {
 
     private void updateMainApp() {
         Platform.runLater(() -> {
-            EditCommand editCmd = new EditCommand(app, serverIdx, server.getUserName(), server.getPassword(), server.getServerName(), newIPAddress);
-            editCmd.execute();
+            if (!app.isServerInDelete(server)) {
+                EditCommand editCmd = new EditCommand(app, serverIdx, server.getUserName(), server.getPassword(), server.getServerName(), newIPAddress);
+                editCmd.execute();
+            }
             app.addHistory(String.format(changeIPSuccessMessage, server.getServerName(), server.getIpAddress(), newIPAddress));
             app.removeServerInChange(server);
         });

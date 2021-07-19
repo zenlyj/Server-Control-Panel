@@ -39,7 +39,7 @@ public class ChangeHostNameCommand extends Command {
         if (isDuplicate) {
             Platform.runLater(()->app.addHistory(String.format(changeNameFailureMessage, server.getServerName())));
             return false;
-        } else if (server.getIsOnline()) {
+        } else if (!server.getIsOnline()) {
             Platform.runLater(()->app.addHistory(String.format(offlineFailureMessage, server.getServerName())));
             return false;
         } else if (app.isServerInChange(server)) {
@@ -85,8 +85,10 @@ public class ChangeHostNameCommand extends Command {
 
     private void updateMainApp() {
         Platform.runLater(() -> {
-            EditCommand editCmd = new EditCommand(app, serverIdx, server.getUserName(), server.getPassword(), newServerName, server.getIpAddress());
-            editCmd.execute();
+            if (!app.isServerInDelete(server)) {
+                EditCommand editCmd = new EditCommand(app, serverIdx, server.getUserName(), server.getPassword(), newServerName, server.getIpAddress());
+                editCmd.execute();
+            }
             app.addHistory(String.format(changeNameSuccessMessage, server.getServerName(), newServerName));
             app.removeServerInChange(server);
         });
@@ -106,8 +108,6 @@ public class ChangeHostNameCommand extends Command {
             };
             new Thread(task).start();
             app.addHistory(String.format(initChangeMessage, server.getServerName()));
-        } else {
-            app.addHistory(String.format(offlineFailureMessage, server.getServerName()));
         }
     }
 }

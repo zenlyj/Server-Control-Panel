@@ -24,7 +24,7 @@ public class Main extends Application{
         primaryStage.show();
         SchedulePingCommand schedulePing = new SchedulePingCommand(app);
         schedulePing.execute();
-        app.getServers().get(0).setBootDatetime(LocalDateTime.of(2021,7,16,12,12));
+//        app.getServers().get(0).setBootDatetime(LocalDateTime.of(2021,7,16,12,12));
     }
 
     public static void main(String[] args) {

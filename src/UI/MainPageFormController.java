@@ -284,7 +284,7 @@ public class MainPageFormController {
                     @Override
                     protected Void call() throws Exception {
                         if (serverToShowTime.isPresent()) {
-                            Platform.runLater(() -> uptime.setText("Uptime: " + serverToShowTime.get().upTime()));
+                            Platform.runLater(() -> uptime.setText(String.format("Uptime: %s", serverToShowTime.get().upTime())));
                         } else {
                             Platform.runLater(() -> uptime.setText(""));
                         }
