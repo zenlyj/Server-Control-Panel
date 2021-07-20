@@ -11,7 +11,7 @@ import javafx.concurrent.Task;
 import java.util.List;
 
 public class ChangeHostNameCommand extends Command {
-    private App app;
+    private final App app;
     private final int serverIdx;
     private final Server server;
     private final String newServerName;
@@ -51,9 +51,9 @@ public class ChangeHostNameCommand extends Command {
     }
 
     private String lstToString(List<Server> servers) {
-        String res = "";
+        StringBuilder res = new StringBuilder();
         for (Server s : servers) {
-            res += s.getIpAddress() + ",";
+            res.append(String.format("%s,", s.getIpAddress()));
         }
         return res.substring(0, res.length()-1);
     }
@@ -98,9 +98,9 @@ public class ChangeHostNameCommand extends Command {
     public void execute() {
         if (isRenamable()) {
             app.setServerInChange(server);
-            Task task = new Task<Void>() {
+            Task<Void> task = new Task<>() {
                 @Override
-                protected Void call() throws Exception {
+                protected Void call() {
                     renameServer();
                     updateMainApp();
                     return null;

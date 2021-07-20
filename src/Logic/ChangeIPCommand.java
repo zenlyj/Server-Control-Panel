@@ -11,8 +11,8 @@ import javafx.concurrent.Task;
 import java.util.List;
 
 public class ChangeIPCommand extends Command {
-    private App app;
-    private Server server;
+    private final App app;
+    private final Server server;
     private final String newIPAddress;
     private final int serverIdx;
     private final String changeIPSuccessMessage = "%1$s's ip address is changed from %2$s to %3$s\n";
@@ -34,9 +34,9 @@ public class ChangeIPCommand extends Command {
     public void execute() {
         if (isIPChangable()) {
             app.setServerInChange(server);
-            Task task = new Task<Void>() {
+            Task<Void> task = new Task<>() {
                 @Override
-                protected Void call() throws Exception {
+                protected Void call() {
                     changeIP();
                     updateMainApp();
                     return null;
@@ -48,9 +48,9 @@ public class ChangeIPCommand extends Command {
     }
 
     private String lstToString(List<Server> servers) {
-        String res = "";
+        StringBuilder res = new StringBuilder();
         for (Server s : servers) {
-            res += s.getIpAddress() + ",";
+            res.append(String.format("%s,", s.getIpAddress()));
         }
         return res.substring(0, res.length()-1);
     }

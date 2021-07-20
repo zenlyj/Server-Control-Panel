@@ -14,13 +14,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class App {
-    private ObservableList<Server> servers;
-    private Set<Integer> serversInEdit;
-    private LinkedList<Server> serversInDelete;
-    private LinkedList<Server> serversInChange;
-    private Storage db;
-    private StringProperty history;
-    private DateTimeFormatter timeFormatter;
+    private final ObservableList<Server> servers;
+    private final Set<Integer> serversInEdit;
+    private final LinkedList<Server> serversInDelete;
+    private final LinkedList<Server> serversInChange;
+    private final Storage db;
+    private final StringProperty history;
+    private final DateTimeFormatter timeFormatter;
 
     public App() {
         db = new Storage();

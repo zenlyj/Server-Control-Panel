@@ -1,17 +1,9 @@
-import Logic.PSCommand;
-import Logic.Parser;
 import Logic.SchedulePingCommand;
-import Logic.UpdateUptimeCommand;
 import Model.App;
 import UI.MainPage;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Optional;
-
 
 public class Main extends Application{
     @Override

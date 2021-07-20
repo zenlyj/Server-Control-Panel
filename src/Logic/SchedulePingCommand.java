@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SchedulePingCommand extends Command {
-    private App app;
+    private final App app;
     private List<Server> serversSnapshot;
     private final String unknownHostMessage = "The following host is unknown: %s\n";
     private final String networkErrorMessage = "Unable to establish network connection to %s!\n";
@@ -80,12 +80,12 @@ public class SchedulePingCommand extends Command {
     }
 
     private void setSchedule() {
-        ScheduledService<Void> service = new ScheduledService<Void>() {
+        ScheduledService<Void> service = new ScheduledService<>() {
             @Override
             protected Task<Void> createTask() {
-                return new Task<Void>() {
+                return new Task<>() {
                     @Override
-                    protected Void call() throws Exception {
+                    protected Void call() {
                         System.out.println("Starting schedule...");
                         serversSnapshot = listDeepCopy(app.getServers());
                         pingServers();

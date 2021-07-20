@@ -10,13 +10,13 @@ import java.util.concurrent.TimeUnit;
 
 public class Server {
     @JsonProperty("ipAddress")
-    private String ipAddress;
+    private final String ipAddress;
     @JsonProperty("serverName")
-    private String serverName;
+    private final String serverName;
     @JsonProperty("userName")
-    private String userName;
+    private final String userName;
     @JsonProperty("password")
-    private String password;
+    private final String password;
     @JsonIgnore
     private boolean isOnline;
     @JsonIgnore

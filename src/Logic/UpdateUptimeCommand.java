@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class UpdateUptimeCommand extends Command {
-    private App app;
-    private Server server;
+    private final App app;
+    private final Server server;
     private final String powershellUnavailableMessage = "Powershell is not available on this work station! Aborting change name operation...\n";
     private final String failedConnectionMessage = "Failed to establish connection to %s\n";
 
@@ -23,9 +23,9 @@ public class UpdateUptimeCommand extends Command {
     }
 
     private String lstToString(List<Server> servers) {
-        String res = "";
+        StringBuilder res = new StringBuilder();
         for (Server s : servers) {
-            res += s.getIpAddress() + ",";
+            res.append(String.format("%s,", s.getIpAddress()));
         }
         return res.substring(0, res.length()-1);
     }
@@ -52,18 +52,16 @@ public class UpdateUptimeCommand extends Command {
                 Platform.runLater(() -> app.addHistory(String.format(failedConnectionMessage, server.getServerName())));
             }
         } catch (PowerShellNotAvailableException ex) {
-            Platform.runLater(()->{
-                app.addHistory(powershellUnavailableMessage);
-            });
+            Platform.runLater(()-> app.addHistory(powershellUnavailableMessage));
         }
         return res;
     }
 
     @Override
     public void execute() {
-        Task task = new Task<Void>() {
+        Task<Void> task = new Task<>() {
             @Override
-            protected Void call() throws Exception {
+            protected Void call() {
                 Optional<String> info = powerShellExec();
                 if (info.isPresent()) {
                     String bootDateTime = info.get().split("\n")[3];

@@ -57,12 +57,12 @@ public class Parser {
 
     public static LocalDateTime parseDateTime(String dateTime) {
         String[] tokens = dateTime.split(" ");
-        int year = 0;
-        int month = 0;
-        int day = 0;
-        int hour = 0;
-        int minute = 0;
-        int second = 0;
+        int year;
+        int month;
+        int day;
+        int hour;
+        int minute;
+        int second;
         String yearInput = tokens[0];
         String timeInput = tokens[1];
         String timeFormInput = tokens[2];

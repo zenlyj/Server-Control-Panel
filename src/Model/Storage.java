@@ -4,14 +4,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Storage {
-    private ObjectMapper objectMapper;
-    private String FILENAME = "data.json";
+    private final ObjectMapper objectMapper;
+    private final String FILENAME = "data.json";
     private File file;
 
     public Storage() {
@@ -42,7 +41,7 @@ public class Storage {
             Scanner reader = new Scanner(file);
             String jsonArray = reader.nextLine();
             System.out.println(jsonArray);
-            servers = objectMapper.readValue(jsonArray, new TypeReference<List<Server>>() {});
+            servers = objectMapper.readValue(jsonArray, new TypeReference<>() {});
         } catch(Exception e) {
             System.out.println(e.getMessage());
         }
