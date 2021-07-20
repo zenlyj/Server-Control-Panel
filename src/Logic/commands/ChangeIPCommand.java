@@ -5,11 +5,10 @@ import Model.App;
 import Model.Server;
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellNotAvailableException;
-import com.profesorfalken.jpowershell.PowerShellResponse;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class ChangeIPCommand extends Command {
     private final App app;
@@ -31,46 +30,11 @@ public class ChangeIPCommand extends Command {
         this.newIPAddress = newIPAddress;
     }
 
-    @Override
-    public void execute() {
-        if (isIPChangable()) {
-            app.setServerInChange(server);
-            Task<Void> task = new Task<>() {
-                @Override
-                protected Void call() {
-                    changeIP();
-                    updateMainApp();
-                    return null;
-                }
-            };
-            new Thread(task).start();
-            app.addHistory(String.format(initChangeMessage, server.getServerName()));
-        }
-    }
-
-    private String lstToString(List<Server> servers) {
-        StringBuilder res = new StringBuilder();
-        for (Server s : servers) {
-            res.append(String.format("%s,", s.getIpAddress()));
-        }
-        return res.substring(0, res.length()-1);
-    }
-
-    private PowerShellResponse createSession(PowerShell powerShell) {
-        powerShell.executeCommand(PSCommand.declareStringVar("allServerIP", lstToString(app.getServers())));
-        powerShell.executeCommand(PSCommand.setTrustedHosts("allServerIP"));
-        powerShell.executeCommand(PSCommand.declareStringVar("serverIP", server.getIpAddress()));
-        powerShell.executeCommand(PSCommand.declareStringVar("userName", server.getUserName()));
-        powerShell.executeCommand(PSCommand.declareStringVar("password", server.getPassword()));
-        powerShell.executeCommand(PSCommand.declareSecurePasswordVar("securePassword", "password"));
-        powerShell.executeCommand(PSCommand.declareCredsVar("creds", "userName", "securePassword"));
-        return powerShell.executeCommand(PSCommand.declareSessionVar("s", "serverIP", "creds"));
-    }
-
     private void changeIP() {
         try (PowerShell powerShell = PowerShell.openSession()) {
-            PowerShellResponse response = createSession(powerShell);
-            if (response.getCommandOutput().isBlank()) {
+            EstablishConnectionCommand cmd = new EstablishConnectionCommand(powerShell, new ArrayList<>(app.getServers()), server, "s");
+            cmd.execute();
+            if (cmd.isSuccess()) {
                 powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.declareStringVar("newIPAddr", newIPAddress)));
                 powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.declareStringVar("oldIPAddr", server.getIpAddress())));
                 powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.declareAdapterVar("adapterIndex", "NIC1")));
@@ -82,17 +46,6 @@ public class ChangeIPCommand extends Command {
         } catch (PowerShellNotAvailableException ex) {
             Platform.runLater(()->app.addHistory(psUnavailableMessage));
         }
-    }
-
-    private void updateMainApp() {
-        Platform.runLater(() -> {
-            if (!app.isServerInDelete(server)) {
-                EditCommand editCmd = new EditCommand(app, serverIdx, server.getUserName(), server.getPassword(), server.getServerName(), newIPAddress);
-                editCmd.execute();
-            }
-            app.addHistory(String.format(changeIPSuccessMessage, server.getServerName(), server.getIpAddress(), newIPAddress));
-            app.removeServerInChange(server);
-        });
     }
 
     private boolean isIPChangable() {
@@ -112,6 +65,34 @@ public class ChangeIPCommand extends Command {
             return false;
         } else {
             return true;
+        }
+    }
+
+    private void updateMainApp() {
+        Platform.runLater(() -> {
+            if (!app.isServerInDelete(server)) {
+                EditCommand editCmd = new EditCommand(app, serverIdx, server.getUserName(), server.getPassword(), server.getServerName(), newIPAddress);
+                editCmd.execute();
+            }
+            app.addHistory(String.format(changeIPSuccessMessage, server.getServerName(), server.getIpAddress(), newIPAddress));
+            app.removeServerInChange(server);
+        });
+    }
+
+    @Override
+    public void execute() {
+        if (isIPChangable()) {
+            app.setServerInChange(server);
+            Task<Void> task = new Task<>() {
+                @Override
+                protected Void call() {
+                    changeIP();
+                    updateMainApp();
+                    return null;
+                }
+            };
+            new Thread(task).start();
+            app.addHistory(String.format(initChangeMessage, server.getServerName()));
         }
     }
 }

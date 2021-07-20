@@ -5,11 +5,10 @@ import Model.App;
 import Model.Server;
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellNotAvailableException;
-import com.profesorfalken.jpowershell.PowerShellResponse;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class ChangeHostNameCommand extends Command {
     private final App app;
@@ -51,29 +50,11 @@ public class ChangeHostNameCommand extends Command {
         }
     }
 
-    private String lstToString(List<Server> servers) {
-        StringBuilder res = new StringBuilder();
-        for (Server s : servers) {
-            res.append(String.format("%s,", s.getIpAddress()));
-        }
-        return res.substring(0, res.length()-1);
-    }
-
-    private PowerShellResponse createSession(PowerShell powerShell) {
-        powerShell.executeCommand(PSCommand.declareStringVar("allServerIP", lstToString(app.getServers())));
-        powerShell.executeCommand(PSCommand.setTrustedHosts("allServerIP"));
-        powerShell.executeCommand(PSCommand.declareStringVar("serverIP", server.getIpAddress()));
-        powerShell.executeCommand(PSCommand.declareStringVar("userName", server.getUserName()));
-        powerShell.executeCommand(PSCommand.declareStringVar("password", server.getPassword()));
-        powerShell.executeCommand(PSCommand.declareSecurePasswordVar("securePassword", "password"));
-        powerShell.executeCommand(PSCommand.declareCredsVar("creds", "userName", "securePassword"));
-        return powerShell.executeCommand(PSCommand.declareSessionVar("s", "serverIP", "creds"));
-    }
-
     private void renameServer() {
         try (PowerShell powerShell = PowerShell.openSession()) {
-            PowerShellResponse response = createSession(powerShell);
-            if (response.getCommandOutput().isBlank()) {
+            EstablishConnectionCommand cmd = new EstablishConnectionCommand(powerShell, new ArrayList<>(app.getServers()), server, "s");
+            cmd.execute();
+            if (cmd.isSuccess()) {
                 powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.declareStringVar("newServerName", newServerName)));
                 powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.renameCommand("newServerName")));
             } else {

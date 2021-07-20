@@ -10,7 +10,7 @@ import com.profesorfalken.jpowershell.PowerShellResponse;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class UpdateUptimeCommand extends Command {
@@ -24,30 +24,12 @@ public class UpdateUptimeCommand extends Command {
         this.server = server;
     }
 
-    private String lstToString(List<Server> servers) {
-        StringBuilder res = new StringBuilder();
-        for (Server s : servers) {
-            res.append(String.format("%s,", s.getIpAddress()));
-        }
-        return res.substring(0, res.length()-1);
-    }
-
-    private PowerShellResponse createSession(PowerShell powerShell) {
-        powerShell.executeCommand(PSCommand.declareStringVar("allServerIP", lstToString(app.getServers())));
-        powerShell.executeCommand(PSCommand.setTrustedHosts("allServerIP"));
-        powerShell.executeCommand(PSCommand.declareStringVar("serverIP", server.getIpAddress()));
-        powerShell.executeCommand(PSCommand.declareStringVar("userName", server.getUserName()));
-        powerShell.executeCommand(PSCommand.declareStringVar("password", server.getPassword()));
-        powerShell.executeCommand(PSCommand.declareSecurePasswordVar("securePassword", "password"));
-        powerShell.executeCommand(PSCommand.declareCredsVar("creds", "userName", "securePassword"));
-        return powerShell.executeCommand(PSCommand.declareSessionVar("s", "serverIP", "creds"));
-    }
-
     private Optional<String> powerShellExec() {
         Optional<String> res = Optional.empty();
         try (PowerShell powerShell = PowerShell.openSession()) {
-            PowerShellResponse response = createSession(powerShell);
-            if (response.getCommandOutput().isBlank()) {
+            EstablishConnectionCommand cmd = new EstablishConnectionCommand(powerShell, new ArrayList<>(app.getServers()), server, "s");
+            cmd.execute();
+            if (cmd.isSuccess()) {
                 PowerShellResponse info = powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.getUpTime()));
                 res = Optional.of(info.getCommandOutput());
             } else {
@@ -59,6 +41,16 @@ public class UpdateUptimeCommand extends Command {
         return res;
     }
 
+    private void updateMainApp(String bootDateTime) {
+        Platform.runLater(() -> {
+            for (Server s : app.getServers()) {
+                if (s.equals(server)) {
+                    s.setBootDatetime(Parser.parseDateTime(bootDateTime));
+                }
+            }
+        });
+    }
+
     @Override
     public void execute() {
         Task<Void> task = new Task<>() {
@@ -67,13 +59,7 @@ public class UpdateUptimeCommand extends Command {
                 Optional<String> info = powerShellExec();
                 if (info.isPresent()) {
                     String bootDateTime = info.get().split("\n")[3];
-                    Platform.runLater(() -> {
-                        for (Server s : app.getServers()) {
-                            if (s.equals(server)) {
-                                s.setBootDatetime(Parser.parseDateTime(bootDateTime));
-                            }
-                        }
-                    });
+                    updateMainApp(bootDateTime);
                 }
                 return null;
             }
