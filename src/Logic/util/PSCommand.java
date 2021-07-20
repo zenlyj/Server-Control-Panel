@@ -1,4 +1,4 @@
-package Logic;
+package Logic.util;
 
 public class PSCommand {
     public static String declareStringVar(String name, String val) {

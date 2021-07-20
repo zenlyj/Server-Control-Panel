@@ -1,5 +1,7 @@
-package Logic;
+package Logic.commands;
 
+import Logic.util.Parser;
+import Logic.util.ParserException;
 import Model.App;
 
 import java.io.File;

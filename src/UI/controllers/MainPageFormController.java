@@ -1,12 +1,16 @@
-package UI;
+package UI.controllers;
 
-import Logic.DeleteCommand;
-import Logic.ImportCommand;
-import Logic.PingCommand;
-import Logic.RemoteDesktopCommand;
-import Logic.ShutdownCommand;
+import Logic.commands.DeleteCommand;
+import Logic.commands.ImportCommand;
+import Logic.commands.PingCommand;
+import Logic.commands.RemoteDesktopCommand;
+import Logic.commands.ShutdownCommand;
 import Model.App;
 import Model.Server;
+import UI.AddForm;
+import UI.ChangeIPForm;
+import UI.ChangeNameForm;
+import UI.EditForm;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ListChangeListener;
@@ -251,15 +255,15 @@ public class MainPageFormController {
     }
 
     private void initButtons() {
-        Image add = new Image(MainPageFormController.class.getResourceAsStream("/plus.png"));
-        Image delete = new Image(MainPageFormController.class.getResourceAsStream("/substract.png"));
-        Image ping = new Image(MainPageFormController.class.getResourceAsStream("/local-network.png"));
-        Image shutdown = new Image(MainPageFormController.class.getResourceAsStream("/power.png"));
-        Image edit = new Image(MainPageFormController.class.getResourceAsStream("/edit.png"));
-        Image changeIP = new Image(MainPageFormController.class.getResourceAsStream("/remote-control.png"));
-        Image changeName = new Image(MainPageFormController.class.getResourceAsStream("/remote-control.png"));
-        Image remoteDesktop = new Image(MainPageFormController.class.getResourceAsStream("/slide.png"));
-        Image massImport = new Image(MainPageFormController.class.getResourceAsStream("/import.png"));
+        Image add = new Image(MainPageFormController.class.getResourceAsStream("/images/plus.png"));
+        Image delete = new Image(MainPageFormController.class.getResourceAsStream("/images/subtract.png"));
+        Image ping = new Image(MainPageFormController.class.getResourceAsStream("/images/local-network.png"));
+        Image shutdown = new Image(MainPageFormController.class.getResourceAsStream("/images/power.png"));
+        Image edit = new Image(MainPageFormController.class.getResourceAsStream("/images/edit.png"));
+        Image changeIP = new Image(MainPageFormController.class.getResourceAsStream("/images/remote-control.png"));
+        Image changeName = new Image(MainPageFormController.class.getResourceAsStream("/images/remote-control.png"));
+        Image remoteDesktop = new Image(MainPageFormController.class.getResourceAsStream("/images/slide.png"));
+        Image massImport = new Image(MainPageFormController.class.getResourceAsStream("/images/import.png"));
 
         addButton.setGraphic(new ImageView(add));
         deleteButton.setGraphic(new ImageView(delete));

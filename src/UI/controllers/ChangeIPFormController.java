@@ -1,8 +1,8 @@
-package UI;
+package UI.controllers;
 
-import Logic.ChangeIPCommand;
-import Logic.Parser;
-import Logic.ParserException;
+import Logic.commands.ChangeIPCommand;
+import Logic.util.Parser;
+import Logic.util.ParserException;
 import Model.App;
 import Model.Server;
 import javafx.event.Event;

@@ -1,4 +1,4 @@
-package Logic;
+package Logic.commands;
 
 import Model.App;
 import Model.Server;

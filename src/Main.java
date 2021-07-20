@@ -1,4 +1,4 @@
-import Logic.SchedulePingCommand;
+import Logic.commands.SchedulePingCommand;
 import Model.App;
 import UI.MainPage;
 import javafx.application.Application;

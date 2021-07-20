@@ -1,9 +1,9 @@
-package UI;
+package UI.controllers;
 
-import Logic.Command;
-import Logic.EditCommand;
-import Logic.Parser;
-import Logic.ParserException;
+import Logic.commands.Command;
+import Logic.commands.EditCommand;
+import Logic.util.Parser;
+import Logic.util.ParserException;
 import Model.App;
 import Model.Server;
 import javafx.event.Event;

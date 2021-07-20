@@ -1,6 +1,6 @@
-package UI;
+package UI.controllers;
 
-import Logic.ChangeHostNameCommand;
+import Logic.commands.ChangeHostNameCommand;
 import Model.App;
 import Model.Server;
 import javafx.event.Event;

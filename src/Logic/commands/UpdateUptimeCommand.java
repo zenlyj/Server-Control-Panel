@@ -1,5 +1,7 @@
-package Logic;
+package Logic.commands;
 
+import Logic.util.PSCommand;
+import Logic.util.Parser;
 import Model.App;
 import Model.Server;
 import com.profesorfalken.jpowershell.PowerShell;
