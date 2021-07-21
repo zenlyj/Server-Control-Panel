@@ -42,7 +42,7 @@ Consists of various buttons that allows users to interact with the software.
 ### Server List
 A list that displays the name and status of all monitored servers. Similar to the Windows File Explorer,
 users are able to select individual entries by `Left Click`. It also supports multiple entry selection, whereby
-users can either select all entries by <br /> `Ctrl-A`, or select multiple entries by `Ctrl-Left Click`.
+users can either select all entries by `Ctrl-A`, or select multiple entries by `Ctrl-Left Click`.
 
 ### Server Information
 Displays various information of the currently selected server. If multiple servers are selected,
@@ -57,17 +57,28 @@ Displays all events that occurred, as well as the time of occurrence.
   which prompts you to enter `Username` and `Password`, these credentials must be
   of a user who is authorized to log in to the server and shut down the server. <br /> The `IP Address` and `Host Name`
   fields refer to the IP address and host name of the server respectively.
+  
+![](https://raw.githubusercontent.com/zenlyj/server-control-panel/docs/src/resources/documentation/AddGuide.PNG)
 
 
 * To add multiple servers to monitor, first enter all server details in `EXCEL`, then
   save the file as `COMMA-DELIMITED CSV` file. <br />
+  
+![](https://raw.githubusercontent.com/zenlyj/server-control-panel/docs/src/resources/documentation/ExcelEntries.PNG)
+
+![](https://raw.githubusercontent.com/zenlyj/server-control-panel/docs/src/resources/documentation/ExcelFileType.PNG)
+
+
   Click on the `Import` button. This launches the `File Explorer` on your system,
   where you can select the `CSV` file.
 
+![](https://raw.githubusercontent.com/zenlyj/server-control-panel/docs/src/resources/documentation/ImportGuide.PNG)
 
 * To edit details of a server, click on the `Edit` button. This creates a window
   which displays the current details of the server. Make the necessary changes
   and click on `Confirm` to change the details of the server.
+  
+![](https://raw.githubusercontent.com/zenlyj/server-control-panel/docs/src/resources/documentation/EditGuide.PNG)
 
 
 * To delete a server from the list of monitored servers, select the server
@@ -75,6 +86,7 @@ Displays all events that occurred, as well as the time of occurrence.
   go, you may first select multiple list entries by `Ctrl-Left Click`. You may
   also select all entries in the list by pressing `Ctrl-A`.
 
+![](https://raw.githubusercontent.com/zenlyj/server-control-panel/docs/src/resources/documentation/DeleteGuide.PNG)
 
 * All server details are stored in a light weight `JSON` file named `data.json`, upon booting
   up `Server Control Panel`, the software reads from the `.json` file and restores the previous state
