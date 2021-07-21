@@ -1,5 +1,5 @@
 # Server Control Panel
-![](https://raw.githubusercontent.com/zenlyj/server-control-panel/main/src/resources/documentation/General.PNG)
+![](https://raw.githubusercontent.com/zenlyj/Server-Control-Panel/main/src/resources/documentation/General.PNG)
 
 ## Inspiration
 During system integration, system engineers or system administrators are often
@@ -34,7 +34,7 @@ third party libraries [Jackson](https://github.com/FasterXML/jackson) and
 * Launch PowerShell as an `Administrator` and execute `java --module-path <ABSOLUTE PATH TO YOUR JAVAFX LIB FOLDER> --add-modules javafx.controls,javafx.fxml <ABSOLUTE PATH TO YOUR SERVER CONTROL PANEL JAR FILE>`.
 
 ## App Layout
-![](https://raw.githubusercontent.com/zenlyj/server-control-panel/main/src/resources/documentation/MainWindow.PNG)
+![](https://raw.githubusercontent.com/zenlyj/Server-Control-Panel/main/src/resources/documentation/MainWindow.PNG)
 
 ### Function Buttons
 Consists of various buttons that allows users to interact with the software.
@@ -58,27 +58,27 @@ Displays all events that occurred, as well as the time of occurrence.
   of a user who is authorized to log in to the server and shut down the server. <br /> The `IP Address` and `Host Name`
   fields refer to the IP address and host name of the server respectively.
   
-![](https://raw.githubusercontent.com/zenlyj/server-control-panel/docs/src/resources/documentation/AddGuide.PNG)
+![](https://raw.githubusercontent.com/zenlyj/Server-Control-Panel/docs/src/resources/documentation/AddGuide.PNG)
 
 
 * To add multiple servers to monitor, first enter all server details in `EXCEL`, then
   save the file as `COMMA-DELIMITED CSV` file. <br />
   
-![](https://raw.githubusercontent.com/zenlyj/server-control-panel/docs/src/resources/documentation/ExcelEntries.PNG)
+![](https://raw.githubusercontent.com/zenlyj/Server-Control-Panel/docs/src/resources/documentation/ExcelEntries.PNG)
 
-![](https://raw.githubusercontent.com/zenlyj/server-control-panel/docs/src/resources/documentation/ExcelFileType.PNG)
+![](https://raw.githubusercontent.com/zenlyj/Server-Control-Panel/docs/src/resources/documentation/ExcelFileType.PNG)
 
 
   Click on the `Import` button. This launches the `File Explorer` on your system,
   where you can select the `CSV` file.
 
-![](https://raw.githubusercontent.com/zenlyj/server-control-panel/docs/src/resources/documentation/ImportGuide.PNG)
+![](https://raw.githubusercontent.com/zenlyj/Server-Control-Panel/docs/src/resources/documentation/ImportGuide.PNG)
 
 * To edit details of a server, click on the `Edit` button. This creates a window
   which displays the current details of the server. Make the necessary changes
   and click on `Confirm` to change the details of the server.
   
-![](https://raw.githubusercontent.com/zenlyj/server-control-panel/docs/src/resources/documentation/EditGuide.PNG)
+![](https://raw.githubusercontent.com/zenlyj/Server-Control-Panel/docs/src/resources/documentation/EditGuide.PNG)
 
 
 * To delete a server from the list of monitored servers, select the server
@@ -86,7 +86,7 @@ Displays all events that occurred, as well as the time of occurrence.
   go, you may first select multiple list entries by `Ctrl-Left Click`. You may
   also select all entries in the list by pressing `Ctrl-A`.
 
-![](https://raw.githubusercontent.com/zenlyj/server-control-panel/docs/src/resources/documentation/DeleteGuide.PNG)
+![](https://raw.githubusercontent.com/zenlyj/Server-Control-Panel/docs/src/resources/documentation/DeleteGuide.PNG)
 
 * All server details are stored in a light weight `JSON` file named `data.json`, upon booting
   up `Server Control Panel`, the software reads from the `.json` file and restores the previous state
