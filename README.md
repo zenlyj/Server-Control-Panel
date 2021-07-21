@@ -1,5 +1,5 @@
 # Server Control Panel
-![](https://raw.githubusercontent.com/zenlyj/server-control-panel/main/src/resources/documentation/General.PNG)
+![](https://raw.githubusercontent.com/zenlyj/Server-Control-Panel/main/src/resources/documentation/General.PNG)
 
 ## Inspiration
 During system integration, system engineers or system administrators are often
@@ -32,4 +32,4 @@ third party libraries [Jackson](https://github.com/FasterXML/jackson) and
 * Download the latest release of [Server Control Panel](https://github.com/zenlyj/server-control-panel/releases)
 * Execute `winrm quickconfig` on `CMD` or `PowerShell` on your computer to ensure that your computer is configured to establish remote connections.
 * Launch PowerShell as an `Administrator` and execute `java --module-path <ABSOLUTE PATH TO YOUR JAVAFX LIB FOLDER> --add-modules javafx.controls,javafx.fxml <ABSOLUTE PATH TO YOUR SERVER CONTROL PANEL JAR FILE>`.
-* Check out the [user guide](https://zenlyj.github.io/server-control-panel/) for detailed documentation of `Server Control Panel`.
+* Check out the [user guide](https://zenlyj.github.io/Server-Control-Panel/) for detailed documentation of `Server Control Panel`.
