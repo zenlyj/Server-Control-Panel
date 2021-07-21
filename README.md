@@ -97,7 +97,11 @@ Displays all events that occurred, as well as the time of occurrence.
 This feature will only work on servers that are connected to the same network as
 the user's machine. Once a valid server is added to `Server Control Panel`, the application
 keeps track of whether the server is online and updates its status in the `Server List`
-component of the application.
+component of the application. <br /> 
+
+Apart from keeping track of whether a server is online or offline,
+this application also displays the uptime of servers at the `Server Information` component. It is a
+live clock that displays the number of days, hours, minutes and seconds since the server was boot up.
 
 This feature utilizes `ICMP`. The monitored server's firewall
 should be configured such that it does not block incoming `ICMP` requests from the user's machine, the server's firewall
@@ -106,3 +110,36 @@ should also allow outgoing `ICMP` responses.
 The application automatically updates the status of the servers in 10 seconds intervals,
 however, the user can also update the server status manually by selecting the server(s)
 on the `Server List` and clicking the `Ping` button.
+
+### Server Shutdown
+This feature will only work on servers that are connected to the same network as
+the user's machine. To shut down a server, simply select a server from the `Server List`
+and click the `Shutdown` button. You may also shut down multiple servers by selecting multiple
+servers from the `Server List` before clicking the `Shutdown` button. <br />
+
+If a server is offline or undergoing name/ip change, the shut down operation will be aborted.
+
+### IP Change
+This feature will only work on servers that are connected to the same network as
+the user's machine. To change the IP address of a server, simply select a server from the
+`Server List` and click on the `Change IP` button. <br />
+
+A new window will be created, prompting you to enter a new IP address. Make the necessary changes
+and click on the `Confirm` button. <br />
+
+If a server is offline, being shut down, or undergoing name change, the IP change operation will
+be aborted.
+
+### Host Name Change
+Similar to IP change, select a server and click on the `Rename` button. Then make the necessary
+changes and click on the `Confirm` button.
+
+If a server is offline, being shut down, or undergoing ip address change, the rename operation will
+be aborted.
+
+### Remote Desktop
+This feature will only work on servers that are connected to the same network as
+the user's machine. The user's machine and server must also support `Remote Desktop Protocol`.
+
+To establish a remote desktop connection with the server, select the server on the `Server List`
+and click on the `Remote Desktop` button.
