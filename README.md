@@ -31,5 +31,5 @@ third party libraries [Jackson](https://github.com/FasterXML/jackson) and
   It should be preinstalled if you are using Windows 10 Anniversary Update, or Windows Server 2016
 * Download the latest release of [Server Control Panel](https://github.com/zenlyj/server-control-panel/releases)
 * Execute `winrm quickconfig` on `CMD` or `PowerShell` on your computer to ensure that your computer is configured to establish remote connections.
-* Launch PowerShell as an `Administrator` and execute `java --module-path <ABSOLUTE PATH TO YOUR JAVAFX LIB FOLDER> --add-modules javafx.controls,javafx.fxml <ABSOLUTE PATH TO YOUR SERVER CONTROL PANEL JAR FILE>`.
+* Launch PowerShell as an `Administrator` and execute `java -jar --module-path <ABSOLUTE PATH TO YOUR JAVAFX LIB FOLDER> --add-modules javafx.controls,javafx.fxml <ABSOLUTE PATH TO YOUR SERVER CONTROL PANEL JAR FILE>`.
 * Check out the [user guide](https://zenlyj.github.io/Server-Control-Panel/) for detailed documentation of `Server Control Panel`.

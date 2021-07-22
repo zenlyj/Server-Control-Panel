@@ -68,8 +68,8 @@ public class Parser {
         String timeFormInput = tokens[2];
 
         String[] yearTokens = yearInput.split("/");
-        month = Integer.parseInt(yearTokens[1]);
-        day = Integer.parseInt(yearTokens[0]);
+        month = Integer.parseInt(yearTokens[0]);
+        day = Integer.parseInt(yearTokens[1]);
         year = Integer.parseInt(yearTokens[2]);
 
         String[] timeTokens = timeInput.split(":");

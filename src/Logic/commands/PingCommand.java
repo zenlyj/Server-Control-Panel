@@ -36,6 +36,14 @@ public class PingCommand extends Command {
                 // Will never have a negative timeout
             }
             Server updatedServer = new Server(serverToCheck);
+            if (updatedServer.getIsOnline() && !isOnline) {
+                // server goes offline
+                updatedServer.setBootDatetime(null);
+            }
+            if (!updatedServer.getIsOnline() && isOnline) {
+                // server boot up
+                new UpdateUptimeCommand(app, updatedServer).execute();
+            }
             updatedServer.setStatus(isOnline);
             servers.set(serverIndex, updatedServer);
         }
