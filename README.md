@@ -119,9 +119,11 @@ the user's machine. To shut down a server, simply select a server from the `Serv
 and click the `Shutdown` button. You may also shut down multiple servers by selecting multiple
 servers from the `Server List` before clicking the `Shutdown` button. <br />
 
+![](https://raw.githubusercontent.com/zenlyj/Server-Control-Panel/docs/src/resources/documentation/ShutdownGuide.PNG)
+
 If a server is offline, being shut down or undergoing name/ip address change, the shut down operation will be aborted.
 
-![](https://raw.githubusercontent.com/zenlyj/Server-Control-Panel/docs/src/resources/documentation/ShutdownGuide.PNG)
+![](https://raw.githubusercontent.com/zenlyj/Server-Control-Panel/docs/src/resources/documentation/ModifyFailure.PNG)
 
 ### IP Address Change
 This feature will only work on servers that are connected to the same network as
