@@ -1,5 +1,5 @@
 # Server Control Panel
-![](https://raw.githubusercontent.com/zenlyj/Server-Control-Panel/main/src/resources/documentation/General.PNG)
+![](https://raw.githubusercontent.com/zenlyj/Server-Control-Panel/docs/src/resources/documentation/General.PNG)
 
 ## Inspiration
 During system integration, system engineers or system administrators are often
@@ -34,7 +34,7 @@ third party libraries [Jackson](https://github.com/FasterXML/jackson) and
 * Launch PowerShell as an `Administrator` and execute `java --module-path <ABSOLUTE PATH TO YOUR JAVAFX LIB FOLDER> --add-modules javafx.controls,javafx.fxml <ABSOLUTE PATH TO YOUR SERVER CONTROL PANEL JAR FILE>`.
 
 ## App Layout
-![](https://raw.githubusercontent.com/zenlyj/Server-Control-Panel/main/src/resources/documentation/MainWindow.PNG)
+![](https://raw.githubusercontent.com/zenlyj/Server-Control-Panel/docs/src/resources/documentation/MainWindow.PNG)
 
 ### Function Buttons
 Consists of various buttons that allows users to interact with the software.
