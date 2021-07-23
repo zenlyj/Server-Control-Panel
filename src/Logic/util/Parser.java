@@ -41,10 +41,12 @@ public class Parser {
             Scanner sc = new Scanner(importFile);
             while (sc.hasNextLine()) {
                 String serverInfo = sc.nextLine();
-                String[] tokens = serverInfo.split(",");
-                if (tokens.length < 4) {
+                String[] tokensComma = serverInfo.split(",");
+                String[] tokensSemi = serverInfo.split(";");
+                if (tokensComma.length < 4 && tokensSemi.length < 4) {
                     throw new ParserException(incorrectEntryMessage);
                 }
+                String[] tokens = tokensComma.length == 4 ? tokensComma : tokensSemi;
                 String ipAddress = parseIPAddress(tokens[3]);
                 tokens[3] = ipAddress;
                 serversToAdd.add(Arrays.asList(tokens));
