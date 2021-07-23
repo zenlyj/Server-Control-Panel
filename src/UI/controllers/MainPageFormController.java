@@ -40,7 +40,7 @@ import java.util.Optional;
 public class MainPageFormController {
     private App app;
     private Server serverToShowTime;
-    private final String noItemSelectedMessage = "There are currently no item(s) selected!\n";
+    private final String noItemSelectedMessage = "There are currently no item(s) selected!";
 
     @FXML
     private Button addButton;

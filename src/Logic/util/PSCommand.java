@@ -54,6 +54,6 @@ public class PSCommand {
     }
 
     public static String getUpTime() {
-        return "Get-CimInstance Win32_OperatingSystem | Select-Object LastBootUpTime";
+        return "((Get-CimInstance Win32_OperatingSystem | Select-Object LastBootUpTime).LastBootUpTime).toString('MM/dd/yyyy HH:mm:ss')";
     }
 }

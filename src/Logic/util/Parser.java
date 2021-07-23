@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Parser {
-    private static final String incorrectIPFormatMessage = "Please make sure that the ip address follows the format xxx.xxx.xxx.xxx\n";
-    private static final String invalidIPMessage = "Please make sure that the input ip address is made of integers (1-255) separated by '.'\n";
-    private static final String fileNotFoundMessage = "File cannot be found!\n";
-    private static final String incorrectEntryMessage = "Please make sure that all required fields are filled!\n";
+    private static final String incorrectIPFormatMessage = "Please make sure that the ip address follows the format xxx.xxx.xxx.xxx";
+    private static final String invalidIPMessage = "Please make sure that the input ip address is made of integers (1-255) separated by '.'";
+    private static final String fileNotFoundMessage = "File cannot be found!";
+    private static final String incorrectEntryMessage = "Please make sure that all required fields are filled!";
 
     public static String parseIPAddress(String input) throws ParserException {
         input = input.strip();
@@ -67,7 +67,6 @@ public class Parser {
         int second;
         String yearInput = tokens[0];
         String timeInput = tokens[1];
-        String timeFormInput = tokens[2];
 
         String[] yearTokens = yearInput.split("/");
         month = Integer.parseInt(yearTokens[0]);
@@ -78,12 +77,6 @@ public class Parser {
         hour = Integer.parseInt(timeTokens[0]);
         minute = Integer.parseInt(timeTokens[1]);
         second = Integer.parseInt(timeTokens[2]);
-
-        if (hour == 12) {
-            hour = timeFormInput.equals("AM") ? 0 : hour;
-        } else {
-            hour = timeFormInput.equals("PM") ? hour+12 : hour;
-        }
 
         return LocalDateTime.of(year, month, day, hour, minute, second);
     }

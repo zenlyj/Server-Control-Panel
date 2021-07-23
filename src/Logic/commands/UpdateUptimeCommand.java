@@ -58,7 +58,7 @@ public class UpdateUptimeCommand extends Command {
             protected Void call() {
                 Optional<String> info = powerShellExec();
                 if (info.isPresent()) {
-                    String bootDateTime = info.get().split("\n")[3];
+                    String bootDateTime = info.get();
                     updateMainApp(bootDateTime);
                 }
                 return null;
