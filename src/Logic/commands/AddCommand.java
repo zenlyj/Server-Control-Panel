@@ -10,8 +10,8 @@ public class AddCommand extends Command {
     private String password;
     private String serverName;
     private String ipAddress;
-    private final String addSuccessMessage = "%s successfully added!\n";
-    private final String addFailureMessage = "%s already exists! Aborting add operation...\n";
+    private final String addSuccessMessage = "%s successfully added!";
+    private final String addFailureMessage = "%s already exists! Aborting add operation...";
 
     public AddCommand(App app, String userName, String password, String serverName, String ipAddress) {
         this.app = app;

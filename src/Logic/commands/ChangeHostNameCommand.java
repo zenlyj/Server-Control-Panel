@@ -15,13 +15,13 @@ public class ChangeHostNameCommand extends Command {
     private final int serverIdx;
     private final Server server;
     private final String newServerName;
-    private final String failedConnectionMessage = "Failed to establish connection to %s\n";
-    private final String psUnavailableMessage = "Powershell is not available on this work station! Aborting change name operation...\n";
-    private final String offlineFailureMessage = "%s is offline! Aborting change name operation...\n";
-    private final String initChangeMessage = "Initiated name change for %s\n";
-    private final String changeNameSuccessMessage = "%1$s successfully renamed to %2$s\n";
-    private final String changeNameFailureMessage = "Failed to rename %s, check that there are no existing servers with the same name\n";
-    private final String inChangeFailureMessage = "%s is currently being shut down or is undergoing IP/name change. Try again later!\n";
+    private final String failedConnectionMessage = "Failed to establish connection to %s";
+    private final String psUnavailableMessage = "Powershell is not available on this work station! Aborting change name operation...";
+    private final String offlineFailureMessage = "%s is offline! Aborting change name operation...";
+    private final String initChangeMessage = "Initiated name change for %s";
+    private final String changeNameSuccessMessage = "%1$s successfully renamed to %2$s";
+    private final String changeNameFailureMessage = "Failed to rename %s, check that there are no existing servers with the same name";
+    private final String inChangeFailureMessage = "%s is currently being shut down or is undergoing IP/name change. Try again later!";
 
     public ChangeHostNameCommand(App app, int serverIdx, String newServerName) {
         this.app = app;

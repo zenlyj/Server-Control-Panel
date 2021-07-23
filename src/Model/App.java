@@ -15,7 +15,7 @@ import javafx.collections.ObservableList;
 
 public class App {
     private final ObservableList<Server> servers;
-    private final Set<Integer> serversInEdit;
+    private final LinkedList<Server> serversInEdit;
     private final LinkedList<Server> serversInDelete;
     private final LinkedList<Server> serversInChange;
     private final Storage db;
@@ -26,7 +26,7 @@ public class App {
         db = new Storage();
         List<Server> retrieved = db.retrieve();
         servers = FXCollections.observableList(retrieved);
-        serversInEdit = new HashSet<>();
+        serversInEdit = new LinkedList<>();
         serversInDelete = new LinkedList<>();
         serversInChange = new LinkedList<>();
         history = new SimpleStringProperty();
@@ -48,16 +48,16 @@ public class App {
     public void addHistory(String newHistory) {
         String currentHistory = this.history.get();
         LocalTime time = LocalTime.now(ZoneId.systemDefault());
-        newHistory = time.format(timeFormatter) + "  " + newHistory;
-        String updatedHistory = currentHistory == null ? newHistory : currentHistory+newHistory;
+        newHistory = String.format("%1$s %2$s\n", time.format(timeFormatter), newHistory);
+        String updatedHistory = currentHistory == null ? newHistory : String.format("%1$s%2$s", currentHistory, newHistory);
         this.history.set(updatedHistory);
     }
 
-    public void setServerInEdit(int serverInEdit) {
+    public void setServerInEdit(Server serverInEdit) {
         this.serversInEdit.add(serverInEdit);
     }
 
-    public void removeServerInEdit(int serverInEdit) {
+    public void removeServerInEdit(Server serverInEdit) {
         this.serversInEdit.remove(serverInEdit);
     }
 
@@ -77,7 +77,7 @@ public class App {
         this.serversInChange.remove(serverInChange);
     }
 
-    public boolean isServerInEdit(int serverIndex) {
+    public boolean isServerInEdit(Server serverIndex) {
         return this.serversInEdit.contains(serverIndex);
     }
 

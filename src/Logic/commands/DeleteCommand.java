@@ -10,7 +10,7 @@ import java.util.List;
 public class DeleteCommand extends Command {
     private App app;
     private List<Server> serversToDelete;
-    private final String deleteSuccessMessage = "%s has been successfully deleted\n";
+    private final String deleteSuccessMessage = "%s has been successfully deleted";
 
     public DeleteCommand(App app, List<Server> serversToDelete) {
         this.serversToDelete = new ArrayList<>(serversToDelete);

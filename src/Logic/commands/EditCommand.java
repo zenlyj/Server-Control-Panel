@@ -12,9 +12,9 @@ public class EditCommand extends Command {
     private String password;
     private String serverName;
     private String ipAddress;
-    private final String editSuccessMessage = "%s has been successfully edited\n";
-    private final String editFailureMessage = "%s already exists in the current list! Aborting edit operation...\n";
-    private final String editNoChangeMessage = "No changes have been made to %s\n";
+    private final String editSuccessMessage = "%s has been successfully edited";
+    private final String editFailureMessage = "%s already exists in the current list! Aborting edit operation...";
+    private final String editNoChangeMessage = "No changes have been made to %s";
 
     public EditCommand(App app, int selectedIndex, String userName, String password, String serverName, String ipAddress) {
         this.app = app;
@@ -27,9 +27,10 @@ public class EditCommand extends Command {
 
     @Override
     public void execute() {
-        app.setServerInEdit(selectedIndex);
+//        app.setServerInEdit(selectedIndex);
         List<Server> servers = app.getServers();
         Server oldServer = servers.get(selectedIndex);
+        app.setServerInEdit(oldServer);
         Server updatedServer = new Server(ipAddress, serverName, userName, password);
         boolean isChanged = (!ipAddress.equals(oldServer.getIpAddress())) ||
                      (!serverName.equals(oldServer.getServerName())) ||

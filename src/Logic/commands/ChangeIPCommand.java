@@ -15,13 +15,13 @@ public class ChangeIPCommand extends Command {
     private final Server server;
     private final String newIPAddress;
     private final int serverIdx;
-    private final String changeIPSuccessMessage = "%1$s's ip address is changed from %2$s to %3$s\n";
-    private final String failedConnectionMessage = "Failed to establish connection to %s\n";
-    private final String psUnavailableMessage = "Powershell is not available on this work station! Aborting change ip operation...\n";
-    private final String offlineFailureMessage = "%s is offline! Aborting change ip operation...\n";
-    private final String initChangeMessage = "Initiated ip address change for %s\n";
-    private final String changeIPFailureMessage = "Failed to change IP for %s, check that the current servers do not have the input IP address\n";
-    private final String inChangeFailureMessage = "%s is currently being shut down or is undergoing IP/name change. Try again later!\n";
+    private final String changeIPSuccessMessage = "%1$s's ip address is changed from %2$s to %3$s";
+    private final String failedConnectionMessage = "Failed to establish connection to %s";
+    private final String psUnavailableMessage = "Powershell is not available on this work station! Aborting change ip operation...";
+    private final String offlineFailureMessage = "%s is offline! Aborting change ip operation...";
+    private final String initChangeMessage = "Initiated ip address change for %s";
+    private final String changeIPFailureMessage = "Failed to change IP for %s, check that the current servers do not have the input IP address";
+    private final String inChangeFailureMessage = "%s is currently being shut down or is undergoing IP/name change. Try again later!";
 
     public ChangeIPCommand(App app, int serverIdx, String newIPAddress) {
         this.app = app;

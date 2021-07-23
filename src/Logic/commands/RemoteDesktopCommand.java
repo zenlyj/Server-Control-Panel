@@ -14,9 +14,9 @@ import java.util.Map;
 public class RemoteDesktopCommand extends Command {
     private App app;
     private Server server;
-    private final String offlineFailureMessage = "%s is offline! Aborting remote desktop operation\n";
-    private final String powershellUnavailableMessage = "Powershell is not available on this work station! Aborting remote desktop operation...\n";
-    private final String initRemoteDesktopMessage = "Initiated remote desktop connection to %s\n";
+    private final String offlineFailureMessage = "%s is offline! Aborting remote desktop operation";
+    private final String powershellUnavailableMessage = "Powershell is not available on this work station! Aborting remote desktop operation...";
+    private final String initRemoteDesktopMessage = "Initiated remote desktop connection to %s";
 
     public RemoteDesktopCommand(App app, Server server) {
         this.app = app;

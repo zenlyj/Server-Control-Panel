@@ -102,8 +102,8 @@ public class MainPageFormController {
         TableView.TableViewSelectionModel<Server> selectionModel = tableView.getSelectionModel();
         boolean isSelected = selectionCheck();
         if (isSelected) {
-            List<Integer> serverIndices = selectionModel.getSelectedIndices();
-            PingCommand pingCommand = new PingCommand(app, serverIndices);
+            List<Server> serverToPing = selectionModel.getSelectedItems();
+            PingCommand pingCommand = new PingCommand(app, serverToPing);
             pingCommand.execute();
         }
     }

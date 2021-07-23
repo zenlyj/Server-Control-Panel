@@ -16,8 +16,8 @@ import java.util.List;
 public class SchedulePingCommand extends Command {
     private final App app;
     private List<Server> serversSnapshot;
-    private final String unknownHostMessage = "The following host is unknown: %s\n";
-    private final String networkErrorMessage = "Unable to establish network connection to %s!\n";
+    private final String unknownHostMessage = "The following host is unknown: %s";
+    private final String networkErrorMessage = "Unable to establish network connection to %s!";
 
     public SchedulePingCommand(App app) {
         this.app = app;
@@ -31,11 +31,24 @@ public class SchedulePingCommand extends Command {
         return serversSnapshot;
     }
 
+    private void updateUptime(Server updatedServer, boolean isOnline) {
+        boolean previousOnline = updatedServer.getIsOnline();
+        if (previousOnline && !isOnline) {
+            // server goes offline
+            updatedServer.setBootDatetime(null);
+        }
+        if (!previousOnline && isOnline) {
+            // server boot up
+            new UpdateUptimeCommand(app, updatedServer).execute();
+        }
+    }
+
     private void pingServers() {
         for (Server server : serversSnapshot) {
-            boolean isOnline = false;
             try {
-                isOnline = InetAddress.getByName(server.getIpAddress()).isReachable(300);
+                boolean isOnline = InetAddress.getByName(server.getIpAddress()).isReachable(300);
+                updateUptime(server, isOnline);
+                server.setStatus(isOnline);
             } catch (UnknownHostException e) {
                 app.addHistory(String.format(unknownHostMessage, server.getServerName()));
             } catch (IOException e) {
@@ -43,15 +56,6 @@ public class SchedulePingCommand extends Command {
             } catch (IllegalArgumentException e) {
                 // will never have a negative timeout
             }
-            if (server.getIsOnline() && !isOnline) {
-                // server goes offline
-                server.setBootDatetime(null);
-            }
-            if (!server.getIsOnline() && isOnline) {
-                // server boot up
-                new UpdateUptimeCommand(app, server).execute();
-            }
-            server.setStatus(isOnline);
         }
     }
 
@@ -60,11 +64,11 @@ public class SchedulePingCommand extends Command {
             int ptr = 0;
             for (int i = 0; i < serversSnapshot.size(); i++) {
                 Server curr = serversSnapshot.get(i);
-                boolean isEdited = app.isServerInEdit(i);
+                boolean isEdited = app.isServerInEdit(curr);
                 boolean isDeleted = app.isServerInDelete(curr);
                 if (isEdited) {
                     // release edited server
-                    app.removeServerInEdit(i);
+                    app.removeServerInEdit(curr);
                 }
                 if (isDeleted) {
                     // release deleted server

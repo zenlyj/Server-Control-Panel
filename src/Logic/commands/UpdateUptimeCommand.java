@@ -16,8 +16,8 @@ import java.util.Optional;
 public class UpdateUptimeCommand extends Command {
     private final App app;
     private final Server server;
-    private final String powershellUnavailableMessage = "Powershell is not available on this work station! Aborting change name operation...\n";
-    private final String failedConnectionMessage = "Failed to establish connection to %s\n";
+    private final String powershellUnavailableMessage = "Powershell is not available on this work station! Aborting change name operation...";
+    private final String failedConnectionMessage = "Failed to establish connection to %s";
 
     public UpdateUptimeCommand(App app, Server server) {
         this.app = app;
