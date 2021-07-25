@@ -40,7 +40,6 @@ public class Storage {
         try {
             Scanner reader = new Scanner(file);
             String jsonArray = reader.nextLine();
-            System.out.println(jsonArray);
             servers = objectMapper.readValue(jsonArray, new TypeReference<>() {});
         } catch(Exception e) {
             System.out.println(e.getMessage());

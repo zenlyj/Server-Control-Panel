@@ -3,10 +3,8 @@ package Model;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -57,16 +55,8 @@ public class App {
         this.serversInEdit.add(serverInEdit);
     }
 
-    public void removeServerInEdit(Server serverInEdit) {
-        this.serversInEdit.remove(serverInEdit);
-    }
-
     public void setServerInDelete(Server serverInDelete) {
         this.serversInDelete.add(serverInDelete);
-    }
-
-    public void removeServerInDelete(Server serverInDelete) {
-        this.serversInDelete.remove(serverInDelete);
     }
 
     public void setServerInChange(Server serverInChange) {
@@ -75,6 +65,15 @@ public class App {
 
     public void removeServerInChange(Server serverInChange) {
         this.serversInChange.remove(serverInChange);
+    }
+
+    public void removeServerInEdit(Server serverInEdit) {
+        System.out.println(serversInEdit);
+        this.serversInEdit.remove(serverInEdit);
+    }
+
+    public void removeServerInDelete(Server serverInDelete) {
+        this.serversInDelete.remove(serverInDelete);
     }
 
     public boolean isServerInEdit(Server serverIndex) {

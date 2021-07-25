@@ -3,15 +3,17 @@ package Logic.commands;
 import Model.App;
 import Model.Server;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public class EditCommand extends Command {
-    private App app;
-    private int selectedIndex;
-    private String userName;
-    private String password;
-    private String serverName;
-    private String ipAddress;
+    private final App app;
+    private final int selectedIndex;
+    private final String userName;
+    private final String password;
+    private final String serverName;
+    private final String ipAddress;
     private final String editSuccessMessage = "%s has been successfully edited";
     private final String editFailureMessage = "%s already exists in the current list! Aborting edit operation...";
     private final String editNoChangeMessage = "No changes have been made to %s";
@@ -27,7 +29,6 @@ public class EditCommand extends Command {
 
     @Override
     public void execute() {
-//        app.setServerInEdit(selectedIndex);
         List<Server> servers = app.getServers();
         Server oldServer = servers.get(selectedIndex);
         app.setServerInEdit(oldServer);

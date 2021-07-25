@@ -17,34 +17,40 @@ public class PingCommand extends Command {
     private final String unknownHostMessage = "The following host is unknown: %s";
     private final String networkErrorMessage = "Unable to establish network connection to %s!";
 
-    public PingCommand(App app, List<Server> serverToPing) {
+    public PingCommand(App app, List<Server> serversToPing) {
         this.app = app;
-        this.serversToPing = new ArrayList<>(serverToPing);
+        this.serversToPing = listDeepCopy(serversToPing);
     }
 
-    private boolean canPing(Server server) {
-        if (server == null) {
-            return false;
+    private List<Server> listDeepCopy(List<Server> listToCopy) {
+        List<Server> res = new ArrayList<>();
+        for (Server server : listToCopy) {
+            res.add(new Server(server));
         }
-        if (!app.getServers().contains(server)) {
-            return false;
-        }
-        if (app.isServerInDelete(server) || app.isServerInEdit(server)) {
-            return false;
-        }
-        return true;
+        return res;
     }
 
-    private void updateUptime(Server updatedServer, boolean isOnline) {
-        boolean previousOnline = updatedServer.getIsOnline();
+    private void updateUptime(Server server, boolean isOnline) {
+        boolean previousOnline = server.getIsOnline();
         if (previousOnline && !isOnline) {
             // server goes offline
-            updatedServer.setBootDatetime(null);
+            server.setBootDatetime(null);
         }
         if (!previousOnline && isOnline) {
             // server boot up
-            new UpdateUptimeCommand(app, updatedServer).execute();
+            new UpdateUptimeCommand(app, server).execute();
         }
+    }
+
+    private void updateMainApp() {
+        Platform.runLater(()->{
+            for (Server server : serversToPing) {
+                if (!app.isServerInDelete(server) && !app.isServerInEdit(server)) {
+                    int serverIndex = app.getServers().indexOf(server);
+                    app.getServers().set(serverIndex, server);
+                }
+            }
+        });
     }
 
     @Override
@@ -53,14 +59,10 @@ public class PingCommand extends Command {
             @Override
             protected Void call() {
                 for (Server server : serversToPing) {
-                    if (!canPing(server)) continue;
                     try {
                         boolean isOnline = InetAddress.getByName(server.getIpAddress()).isReachable(300);
-                        Server updatedServer = new Server(server);
-                        updateUptime(updatedServer, isOnline);
-                        updatedServer.setStatus(isOnline);
-                        int serverIndex = app.getServers().indexOf(server);
-                        Platform.runLater(()-> app.getServers().set(serverIndex, updatedServer));
+                        updateUptime(server, isOnline);
+                        server.setStatus(isOnline);
                     } catch (UnknownHostException e) {
                         app.addHistory(String.format(unknownHostMessage, server.getServerName()));
                     } catch (IOException e) {
@@ -69,6 +71,7 @@ public class PingCommand extends Command {
                         // Will never have a negative timeout
                     }
                 }
+                updateMainApp();
                 return null;
             }
         };

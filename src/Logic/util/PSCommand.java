@@ -53,7 +53,15 @@ public class PSCommand {
         return String.format("mstsc /v:%s", serverIPVar);
     }
 
+    public static String declareDateTimeVar(String varName, String expression) {
+        return (String.format("$%1$s = %2$s", varName, expression));
+    }
+
     public static String getUpTime() {
-        return "((Get-CimInstance Win32_OperatingSystem | Select-Object LastBootUpTime).LastBootUpTime).toString('MM/dd/yyyy HH:mm:ss')";
+        return "(Get-CimInstance Win32_OperatingSystem | Select-Object LastBootUpTime).LastBootUpTime";
+    }
+
+    public static String formatUpTime(String dateTimeVar) {
+        return String.format("$%s.toString('MM/dd/yyyy HH:mm:ss')", dateTimeVar);
     }
 }
