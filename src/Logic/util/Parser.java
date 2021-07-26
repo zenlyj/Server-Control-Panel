@@ -2,6 +2,7 @@ package Logic.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class Parser {
         return serversToAdd;
     }
 
-    public static LocalDateTime parseDateTime(String dateTime) throws NumberFormatException, ArrayIndexOutOfBoundsException, DateTimeParseException {
+    public static LocalDateTime parseDateTime(String dateTime) throws NumberFormatException, ArrayIndexOutOfBoundsException, DateTimeException {
         String[] tokens = dateTime.split(" ");
         int year;
         int month;
