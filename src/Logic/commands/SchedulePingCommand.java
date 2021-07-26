@@ -46,7 +46,7 @@ public class SchedulePingCommand extends Command {
     private void pingServers() {
         for (Server server : serversSnapshot) {
             try {
-                boolean isOnline = InetAddress.getByName(server.getIpAddress()).isReachable(300);
+                boolean isOnline = InetAddress.getByName(server.getIpAddress()).isReachable(150);
                 updateUptime(server, isOnline);
                 server.setStatus(isOnline);
             } catch (UnknownHostException e) {
@@ -66,17 +66,24 @@ public class SchedulePingCommand extends Command {
                 Server curr = serversSnapshot.get(i);
                 boolean isEdited = app.isServerInEdit(curr);
                 boolean isDeleted = app.isServerInDelete(curr);
-                if (isEdited) {
-                    app.removeServerInEdit(curr);
-                }
-                if (isDeleted) {
-                    app.removeServerInDelete(curr);
-                }
-                if (!isEdited) {
+//                if (isEdited) {
+//                    app.removeServerInEdit(curr);
+//                }
+//                if (isDeleted) {
+//                    app.removeServerInDelete(curr);
+//                }
+//                if (!isEdited) {
+//                    app.getServers().set(ptr, curr);
+//                }
+                if (!isEdited && !isDeleted) {
                     app.getServers().set(ptr, curr);
                 }
-                ptr++;
+                if (!isDeleted) {
+                    ptr++;
+                }
             }
+            app.removeServersInDelete();
+            app.removeServersInEdit();
         });
     }
 

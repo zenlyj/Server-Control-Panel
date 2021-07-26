@@ -13,8 +13,8 @@ import javafx.collections.ObservableList;
 
 public class App {
     private final ObservableList<Server> servers;
-    private final LinkedList<Server> serversInEdit;
-    private final LinkedList<Server> serversInDelete;
+    private LinkedList<Server> serversInEdit;
+    private LinkedList<Server> serversInDelete;
     private final LinkedList<Server> serversInChange;
     private final Storage db;
     private final StringProperty history;
@@ -67,13 +67,12 @@ public class App {
         this.serversInChange.remove(serverInChange);
     }
 
-    public void removeServerInEdit(Server serverInEdit) {
-        System.out.println(serversInEdit);
-        this.serversInEdit.remove(serverInEdit);
+    public void removeServersInEdit() {
+        this.serversInEdit = new LinkedList<>();
     }
 
-    public void removeServerInDelete(Server serverInDelete) {
-        this.serversInDelete.remove(serverInDelete);
+    public void removeServersInDelete() {
+        this.serversInDelete = new LinkedList<>();
     }
 
     public boolean isServerInEdit(Server serverIndex) {

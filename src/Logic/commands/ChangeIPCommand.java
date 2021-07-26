@@ -14,7 +14,6 @@ public class ChangeIPCommand extends Command {
     private final App app;
     private final Server server;
     private final String newIPAddress;
-    private final int serverIdx;
     private final String changeIPSuccessMessage = "%1$s's ip address is changed from %2$s to %3$s";
     private final String failedConnectionMessage = "Failed to establish connection to %s";
     private final String psUnavailableMessage = "Powershell is not available on this work station! Aborting change ip operation...";
@@ -25,7 +24,6 @@ public class ChangeIPCommand extends Command {
 
     public ChangeIPCommand(App app, int serverIdx, String newIPAddress) {
         this.app = app;
-        this.serverIdx = serverIdx;
         this.server = app.getServers().get(serverIdx);
         this.newIPAddress = newIPAddress;
     }
@@ -70,8 +68,8 @@ public class ChangeIPCommand extends Command {
 
     private void updateMainApp() {
         Platform.runLater(() -> {
-            if (!app.isServerInDelete(server)) {
-                EditCommand editCmd = new EditCommand(app, serverIdx, server.getUserName(), server.getPassword(), server.getServerName(), newIPAddress);
+            if (app.getServers().contains(server)) {
+                EditCommand editCmd = new EditCommand(app, app.getServers().indexOf(server), server.getUserName(), server.getPassword(), server.getServerName(), newIPAddress);
                 editCmd.execute();
             }
             app.addHistory(String.format(changeIPSuccessMessage, server.getServerName(), server.getIpAddress(), newIPAddress));

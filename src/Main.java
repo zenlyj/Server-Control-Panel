@@ -1,4 +1,5 @@
 import Logic.commands.SchedulePingCommand;
+import Logic.util.Parser;
 import Model.App;
 import UI.MainPage;
 import javafx.application.Application;

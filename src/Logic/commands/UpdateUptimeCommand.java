@@ -46,8 +46,12 @@ public class UpdateUptimeCommand extends Command {
         Platform.runLater(() -> {
             for (Server s : app.getServers()) {
                 if (s.equals(server) && s.getIsOnline()) {
-                    s.setBootDatetime(Parser.parseDateTime(bootDateTime));
-                    app.setServerInEdit(server);
+                    try {
+                        s.setBootDatetime(Parser.parseDateTime(bootDateTime));
+                        app.setServerInEdit(server);
+                    } catch (Exception ex) {
+                        Platform.runLater(() -> app.addHistory(String.format(failedConnectionMessage, server.getServerName())));
+                    }
                 }
             }
         });
@@ -60,7 +64,6 @@ public class UpdateUptimeCommand extends Command {
             protected Void call() {
                 Optional<String> info = powerShellExec();
                 if (info.isPresent()) {
-                    System.out.println("updating " + server.getServerName());
                     String bootDateTime = info.get();
                     updateMainApp(bootDateTime);
                 }

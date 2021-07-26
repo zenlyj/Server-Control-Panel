@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 public class ChangeHostNameCommand extends Command {
     private final App app;
-    private final int serverIdx;
     private final Server server;
     private final String newServerName;
     private final String failedConnectionMessage = "Failed to establish connection to %s";
@@ -25,7 +24,6 @@ public class ChangeHostNameCommand extends Command {
 
     public ChangeHostNameCommand(App app, int serverIdx, String newServerName) {
         this.app = app;
-        this.serverIdx = serverIdx;
         this.server = app.getServers().get(serverIdx);
         this.newServerName = newServerName;
     }
@@ -67,8 +65,8 @@ public class ChangeHostNameCommand extends Command {
 
     private void updateMainApp() {
         Platform.runLater(() -> {
-            if (!app.isServerInDelete(server)) {
-                EditCommand editCmd = new EditCommand(app, serverIdx, server.getUserName(), server.getPassword(), newServerName, server.getIpAddress());
+            if (app.getServers().contains(server)) {
+                EditCommand editCmd = new EditCommand(app, app.getServers().indexOf(server), server.getUserName(), server.getPassword(), newServerName, server.getIpAddress());
                 editCmd.execute();
             }
             app.addHistory(String.format(changeNameSuccessMessage, server.getServerName(), newServerName));
