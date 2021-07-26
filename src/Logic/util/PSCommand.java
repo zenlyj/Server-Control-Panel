@@ -45,12 +45,12 @@ public class PSCommand {
         return String.format("Remove-NetIPAddress -InterfaceIndex $%1$s -IPAddress $%2$s -Confirm:$false", adapterVar, oldIPVar);
     }
 
-    public static String cmdKey(String serverIPVar, String userNameVar, String passwordVar) {
-        return String.format("cmdkey /generic:TERMSRV/'%1$s' /user:'%2$s' /pass:'%3$s'", serverIPVar, userNameVar, passwordVar);
+    public static String cmdKey(String serverIP, String userName, String password) {
+        return String.format("cmdkey /generic:TERMSRV/'%1$s' /user:'%2$s' /pass:'%3$s'", serverIP, userName, password);
     }
 
-    public static String mstscExec(String serverIPVar) {
-        return String.format("mstsc /v:%s", serverIPVar);
+    public static String mstscExec(String serverIP) {
+        return String.format("mstsc /v:%s", serverIP);
     }
 
     public static String declareDateTimeVar(String varName, String expression) {
