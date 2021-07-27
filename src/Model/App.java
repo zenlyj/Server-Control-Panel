@@ -47,7 +47,7 @@ public class App {
         String currentHistory = this.history.get();
         LocalTime time = LocalTime.now(ZoneId.systemDefault());
         newHistory = String.format("%1$s %2$s\n", time.format(timeFormatter), newHistory);
-        String updatedHistory = currentHistory == null ? newHistory : String.format("%1$s%2$s", currentHistory, newHistory);
+        String updatedHistory = (currentHistory == null || currentHistory.length() > 9000) ? newHistory : String.format("%1$s%2$s", currentHistory, newHistory);
         this.history.set(updatedHistory);
     }
 

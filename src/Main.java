@@ -1,5 +1,4 @@
 import Logic.commands.SchedulePingCommand;
-import Logic.util.Parser;
 import Model.App;
 import UI.MainPage;
 import javafx.application.Application;
@@ -13,6 +12,7 @@ public class Main extends Application{
         MainPage mainPage = new MainPage();
         primaryStage.setTitle("Server Control Panel");
         Scene primaryScene = mainPage.getMainPage(app);
+        primaryStage.setResizable(false);
         primaryStage.setScene(primaryScene);
         primaryStage.show();
         SchedulePingCommand schedulePing = new SchedulePingCommand(app);

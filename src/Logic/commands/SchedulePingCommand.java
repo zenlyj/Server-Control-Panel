@@ -85,7 +85,6 @@ public class SchedulePingCommand extends Command {
                 return new Task<>() {
                     @Override
                     protected Void call() {
-                        System.out.println("Starting schedule...");
                         serversSnapshot = listDeepCopy(app.getServers());
                         pingServers();
                         updateMainApp();

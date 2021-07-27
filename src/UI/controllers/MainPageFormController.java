@@ -79,6 +79,7 @@ public class MainPageFormController {
     public void handleAdd() {
         try {
             Stage stage = new Stage();
+            stage.setResizable(false);
             stage.setScene(AddForm.getForm(app));
             stage.show();
         } catch (Exception ex) {
@@ -139,6 +140,7 @@ public class MainPageFormController {
             if (isSelected) {
                 int selectedIndex = selectionModel.getSelectedIndex();
                 Stage stage = new Stage();
+                stage.setResizable(false);
                 stage.setScene(EditForm.getForm(app, selectedIndex));
                 stage.show();
             }
@@ -155,6 +157,7 @@ public class MainPageFormController {
             if (isSelected) {
                 int selectedIndex = selectionModel.getSelectedIndex();
                 Stage stage = new Stage();
+                stage.setResizable(false);
                 stage.setScene(ChangeIPForm.getForm(app, selectedIndex));
                 stage.show();
             }
@@ -171,6 +174,7 @@ public class MainPageFormController {
             if (isSelected) {
                 int selectedIndex = selectionModel.getSelectedIndex();
                 Stage stage = new Stage();
+                stage.setResizable(false);
                 stage.setScene(ChangeNameForm.getForm(app, selectedIndex));
                 stage.show();
             }

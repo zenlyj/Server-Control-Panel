@@ -47,6 +47,5 @@ public class EstablishConnectionCommand extends Command {
     @Override
     public void execute() {
         response = createSession(powerShell);
-        System.out.println(response.getCommandOutput());
     }
 }
