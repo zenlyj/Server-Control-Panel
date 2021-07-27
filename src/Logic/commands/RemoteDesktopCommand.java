@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RemoteDesktopCommand extends Command {
-    private App app;
-    private Server server;
+    private final App app;
+    private final Server server;
     private final String offlineFailureMessage = "%s is offline! Aborting remote desktop operation";
     private final String powershellUnavailableMessage = "Powershell is not available on this work station! Aborting remote desktop operation...";
     private final String initRemoteDesktopMessage = "Initiated remote desktop connection to %s";
@@ -30,18 +30,16 @@ public class RemoteDesktopCommand extends Command {
             powerShell.executeCommand(PSCommand.cmdKey(server.getIpAddress(), server.getUserName(), server.getPassword()));
             powerShell.configuration(myConfig).executeCommand(PSCommand.mstscExec(server.getIpAddress()));
         } catch (PowerShellNotAvailableException ex) {
-            Platform.runLater(()->{
-                app.addHistory(powershellUnavailableMessage);
-            });
+            Platform.runLater(()-> app.addHistory(powershellUnavailableMessage));
         }
     }
 
     @Override
     public void execute() {
         if (server.getIsOnline()) {
-            Task task = new Task<Void>() {
+            Task<Void> task = new Task<>() {
                 @Override
-                protected Void call() throws Exception {
+                protected Void call() {
                     powerShellExec(server);
                     return null;
                 }

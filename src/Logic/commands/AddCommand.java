@@ -5,11 +5,11 @@ import Model.Server;
 import javafx.collections.ObservableList;
 
 public class AddCommand extends Command {
-    private App app;
-    private String userName;
-    private String password;
-    private String serverName;
-    private String ipAddress;
+    private final App app;
+    private final String userName;
+    private final String password;
+    private final String serverName;
+    private final String ipAddress;
     private final String addSuccessMessage = "%s successfully added!";
     private final String addFailureMessage = "%s already exists! Aborting add operation...";
 

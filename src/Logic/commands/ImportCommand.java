@@ -8,8 +8,8 @@ import java.io.File;
 import java.util.List;
 
 public class ImportCommand extends Command {
-    private App app;
-    private File importFile;
+    private final App app;
+    private final File importFile;
 
     public ImportCommand(App app, File importFile) {
         this.app = app;

@@ -66,15 +66,6 @@ public class SchedulePingCommand extends Command {
                 Server curr = serversSnapshot.get(i);
                 boolean isEdited = app.isServerInEdit(curr);
                 boolean isDeleted = app.isServerInDelete(curr);
-//                if (isEdited) {
-//                    app.removeServerInEdit(curr);
-//                }
-//                if (isDeleted) {
-//                    app.removeServerInDelete(curr);
-//                }
-//                if (!isEdited) {
-//                    app.getServers().set(ptr, curr);
-//                }
                 if (!isEdited && !isDeleted) {
                     app.getServers().set(ptr, curr);
                 }
