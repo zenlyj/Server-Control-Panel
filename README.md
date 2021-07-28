@@ -3,7 +3,7 @@
 
 ## Inspiration
 During system integration, system engineers or system administrators are often
-required to keep track of server status, as well as perform remote operations
+required to keep track of server status, as well as perform various configurations
 on servers. For a small system of less than 20 servers, it is possible to do
 the aforementioned manually, that is to say, ping each and every server manually to
 check whether a server is online or offline, or remotely connect to each server
@@ -32,4 +32,4 @@ third party libraries [Jackson](https://github.com/FasterXML/jackson) and
 * Download the latest release of [Server Control Panel](https://github.com/zenlyj/server-control-panel/releases)
 * Execute `winrm quickconfig` on `CMD` or `PowerShell` on your computer to ensure that your computer is configured to establish remote connections.
 * Launch PowerShell as an `Administrator` and execute `java -jar --module-path <ABSOLUTE PATH TO YOUR JAVAFX LIB FOLDER> --add-modules javafx.controls,javafx.fxml <ABSOLUTE PATH TO YOUR SERVER CONTROL PANEL JAR FILE>`.
-* Check out the [user guide](https://zenlyj.github.io/Server-Control-Panel/) for detailed documentation of `Server Control Panel`.
+* Check out the [user guide](https://zenlyj.github.io/Server-Control-Panel/) for a detailed documentation of `Server Control Panel`.
