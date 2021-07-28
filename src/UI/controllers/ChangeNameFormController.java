@@ -11,14 +11,14 @@ import javafx.stage.Stage;
 
 public class ChangeNameFormController {
     private App app;
-    private int selectedIndex;
+    private Server serverToEdit;
     @FXML
     private TextField hostNameField;
 
     @FXML
     public void handleConfirm(Event e) {
         String hostName = hostNameField.getText().strip();
-        ChangeHostNameCommand cmd = new ChangeHostNameCommand(app, selectedIndex, hostName);
+        ChangeHostNameCommand cmd = new ChangeHostNameCommand(app, serverToEdit, hostName);
         cmd.execute();
         Node source = (Node) e.getSource();
         Stage stage = (Stage) source.getScene().getWindow();
@@ -32,10 +32,9 @@ public class ChangeNameFormController {
         stage.close();
     }
 
-    public void init(App app, int selectedIndex) {
+    public void init(App app, Server selectedServer) {
         this.app = app;
-        this.selectedIndex = selectedIndex;
-        Server serverToEdit = app.getServers().get(selectedIndex);
+        this.serverToEdit = selectedServer;
         this.hostNameField.setText(serverToEdit.getServerName());
     }
 }

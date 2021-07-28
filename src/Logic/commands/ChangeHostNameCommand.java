@@ -22,9 +22,9 @@ public class ChangeHostNameCommand extends Command {
     private final String changeNameFailureMessage = "Failed to rename %s, check that there are no existing servers with the same name";
     private final String inChangeFailureMessage = "%s is currently being shut down or is undergoing IP/name change. Try again later!";
 
-    public ChangeHostNameCommand(App app, int serverIdx, String newServerName) {
+    public ChangeHostNameCommand(App app, Server serverToEdit, String newServerName) {
         this.app = app;
-        this.server = app.getServers().get(serverIdx);
+        this.server = serverToEdit;
         this.newServerName = newServerName;
     }
 
@@ -66,7 +66,7 @@ public class ChangeHostNameCommand extends Command {
     private void updateMainApp() {
         Platform.runLater(() -> {
             if (app.getServers().contains(server)) {
-                EditCommand editCmd = new EditCommand(app, app.getServers().indexOf(server), server.getUserName(), server.getPassword(), newServerName, server.getIpAddress());
+                EditCommand editCmd = new EditCommand(app, server, server.getUserName(), server.getPassword(), newServerName, server.getIpAddress());
                 editCmd.execute();
             }
             app.addHistory(String.format(changeNameSuccessMessage, server.getServerName(), newServerName));

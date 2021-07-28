@@ -138,10 +138,10 @@ public class MainPageFormController {
             boolean isSelected = selectionCheck();
             TableView.TableViewSelectionModel<Server> selectionModel = tableView.getSelectionModel();
             if (isSelected) {
-                int selectedIndex = selectionModel.getSelectedIndex();
+                Server selectedServer = selectionModel.getSelectedItem();
                 Stage stage = new Stage();
                 stage.setResizable(false);
-                stage.setScene(EditForm.getForm(app, selectedIndex));
+                stage.setScene(EditForm.getForm(app, selectedServer));
                 stage.show();
             }
         } catch (Exception ex) {
@@ -155,10 +155,10 @@ public class MainPageFormController {
             boolean isSelected = selectionCheck();
             TableView.TableViewSelectionModel<Server> selectionModel = tableView.getSelectionModel();
             if (isSelected) {
-                int selectedIndex = selectionModel.getSelectedIndex();
+                Server selectedServer = selectionModel.getSelectedItem();
                 Stage stage = new Stage();
                 stage.setResizable(false);
-                stage.setScene(ChangeIPForm.getForm(app, selectedIndex));
+                stage.setScene(ChangeIPForm.getForm(app, selectedServer));
                 stage.show();
             }
         } catch (Exception ex) {
@@ -172,10 +172,10 @@ public class MainPageFormController {
             boolean isSelected = selectionCheck();
             TableView.TableViewSelectionModel<Server> selectionModel = tableView.getSelectionModel();
             if (isSelected) {
-                int selectedIndex = selectionModel.getSelectedIndex();
+                Server selectedServer = selectionModel.getSelectedItem();
                 Stage stage = new Stage();
                 stage.setResizable(false);
-                stage.setScene(ChangeNameForm.getForm(app, selectedIndex));
+                stage.setScene(ChangeNameForm.getForm(app, selectedServer));
                 stage.show();
             }
         } catch (Exception ex) {

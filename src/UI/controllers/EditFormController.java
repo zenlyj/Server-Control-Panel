@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 
 public class EditFormController {
     private App app;
-    private int selectedIndex;
+    private Server serverToEdit;
     @FXML
     private TextField userNameField;
     @FXML
@@ -31,7 +31,7 @@ public class EditFormController {
             String password = passwordField.getText();
             String serverName = hostNameField.getText().strip();
             String ip = Parser.parseIPAddress(ipField.getText());
-            Command cmd = new EditCommand(app, selectedIndex, userName, password, serverName, ip);
+            Command cmd = new EditCommand(app, serverToEdit, userName, password, serverName, ip);
             cmd.execute();
             Node source = (Node) e.getSource();
             Stage stage = (Stage) source.getScene().getWindow();
@@ -48,10 +48,9 @@ public class EditFormController {
         stage.close();
     }
 
-    public void init(App app, int selectedIndex) {
+    public void init(App app, Server selectedServer) {
         this.app = app;
-        this.selectedIndex = selectedIndex;
-        Server serverToEdit = app.getServers().get(selectedIndex);
+        this.serverToEdit = selectedServer;
         this.userNameField.setText(serverToEdit.getUserName());
         this.passwordField.setText(serverToEdit.getPassword());
         this.hostNameField.setText(serverToEdit.getServerName());

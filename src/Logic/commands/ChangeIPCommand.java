@@ -22,9 +22,9 @@ public class ChangeIPCommand extends Command {
     private final String changeIPFailureMessage = "Failed to change IP for %s, check that the current servers do not have the input IP address";
     private final String inChangeFailureMessage = "%s is currently being shut down or is undergoing IP/name change. Try again later!";
 
-    public ChangeIPCommand(App app, int serverIdx, String newIPAddress) {
+    public ChangeIPCommand(App app, Server serverToEdit, String newIPAddress) {
         this.app = app;
-        this.server = app.getServers().get(serverIdx);
+        this.server = serverToEdit;
         this.newIPAddress = newIPAddress;
     }
 
@@ -69,7 +69,7 @@ public class ChangeIPCommand extends Command {
     private void updateMainApp() {
         Platform.runLater(() -> {
             if (app.getServers().contains(server)) {
-                EditCommand editCmd = new EditCommand(app, app.getServers().indexOf(server), server.getUserName(), server.getPassword(), server.getServerName(), newIPAddress);
+                EditCommand editCmd = new EditCommand(app, server, server.getUserName(), server.getPassword(), server.getServerName(), newIPAddress);
                 editCmd.execute();
             }
             app.addHistory(String.format(changeIPSuccessMessage, server.getServerName(), server.getIpAddress(), newIPAddress));

@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 
 public class ChangeIPFormController {
     private App app;
-    private int selectedIndex;
+    private Server serverToEdit;
     @FXML
     private TextField ipField;
 
@@ -21,7 +21,7 @@ public class ChangeIPFormController {
     public void handleConfirm(Event e) {
         try {
             String ip = Parser.parseIPAddress(ipField.getText());
-            ChangeIPCommand cmd = new ChangeIPCommand(app, selectedIndex, ip);
+            ChangeIPCommand cmd = new ChangeIPCommand(app, serverToEdit, ip);
             cmd.execute();
             Node source = (Node) e.getSource();
             Stage stage = (Stage) source.getScene().getWindow();
@@ -38,10 +38,9 @@ public class ChangeIPFormController {
         stage.close();
     }
 
-    public void init(App app, int selectedIndex) {
+    public void init(App app, Server selectedServer) {
         this.app = app;
-        this.selectedIndex = selectedIndex;
-        Server serverToEdit = app.getServers().get(selectedIndex);
+        this.serverToEdit = selectedServer;
         this.ipField.setText(serverToEdit.getIpAddress());
     }
 }
