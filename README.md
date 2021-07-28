@@ -33,3 +33,8 @@ third party libraries [Jackson](https://github.com/FasterXML/jackson) and
 * Execute `winrm quickconfig` on `CMD` or `PowerShell` on your computer to ensure that your computer is configured to establish remote connections.
 * Launch PowerShell as an `Administrator` and execute `java -jar --module-path <ABSOLUTE PATH TO YOUR JAVAFX LIB FOLDER> --add-modules javafx.controls,javafx.fxml <ABSOLUTE PATH TO YOUR SERVER CONTROL PANEL JAR FILE>`.
 * Check out the [user guide](https://zenlyj.github.io/Server-Control-Panel/) for a detailed documentation of `Server Control Panel`.
+
+## Ideas for Future Extensions
+* Remote server boot up using Wake on LAN technology
+* Remote transfer of files to server
+* Monitoring of server CPU temperature
