@@ -52,7 +52,6 @@ public class ParserTest {
         DateTimeException ex = assertThrows(DateTimeException.class, () -> {
            Parser.parseDateTime(dateTime);
         });
-        System.out.println(ex.getMessage());
         assertEquals(ex.getMessage(), "Invalid value for MonthOfYear (valid values 1 - 12): 17");
     }
 }
