@@ -45,7 +45,7 @@ public class PingCommand extends Command {
     private void updateMainApp() {
         Platform.runLater(()->{
             for (Server server : serversToPing) {
-                if (!app.isServerInDelete(server) && !app.isServerInEdit(server)) {
+                if (!app.isServerInDelete(server) && !app.isServerInEdit(server) && app.getServers().contains(server)) {
                     int serverIndex = app.getServers().indexOf(server);
                     app.getServers().set(serverIndex, server);
                 }
@@ -60,7 +60,7 @@ public class PingCommand extends Command {
             protected Void call() {
                 for (Server server : serversToPing) {
                     try {
-                        boolean isOnline = InetAddress.getByName(server.getIpAddress()).isReachable(300);
+                        boolean isOnline = InetAddress.getByName(server.getIpAddress()).isReachable(150);
                         updateUptime(server, isOnline);
                         server.setStatus(isOnline);
                     } catch (UnknownHostException e) {
