@@ -45,8 +45,12 @@ public class PingCommand extends Command {
     private void updateMainApp() {
         Platform.runLater(()->{
             for (Server server : serversToPing) {
-                if (!app.isServerInDelete(server) && !app.isServerInEdit(server) && app.getServers().contains(server)) {
-                    int serverIndex = app.getServers().indexOf(server);
+                if (!app.getServers().contains(server)) {
+                    continue;
+                }
+                int serverIndex = app.getServers().indexOf(server);
+                Server currServer = app.getServers().get(serverIndex);
+                if (server.isSame(currServer)) {
                     app.getServers().set(serverIndex, server);
                 }
             }

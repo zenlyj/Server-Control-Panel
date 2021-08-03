@@ -103,6 +103,13 @@ public class Server {
         return String.format("%1$s days %2$s hours %3$s minutes %4$s seconds", days, hours, minutes, seconds);
     }
 
+    public boolean isSame(Server server) {
+        return server.ipAddress.equals(this.ipAddress) &&
+                server.serverName.equals(this.serverName) &&
+                server.userName.equals(this.userName) &&
+                server.password.equals(this.password);
+    }
+
     @Override
     public boolean equals(Object compared) {
         if (compared == this) {
