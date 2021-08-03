@@ -66,7 +66,9 @@ public class ChangeHostNameCommand extends Command {
     private void updateMainApp() {
         Platform.runLater(() -> {
             if (app.getServers().contains(server)) {
-                EditCommand editCmd = new EditCommand(app, server, server.getUserName(), server.getPassword(), newServerName, server.getIpAddress());
+                int serverIndex = app.getServers().indexOf(server);
+                Server currServer = app.getServers().get(serverIndex);
+                EditCommand editCmd = new EditCommand(app, currServer, currServer.getUserName(), currServer.getPassword(), newServerName, currServer.getIpAddress());
                 editCmd.execute();
             }
             app.addHistory(String.format(changeNameSuccessMessage, server.getServerName(), newServerName));

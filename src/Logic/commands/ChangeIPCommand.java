@@ -69,7 +69,9 @@ public class ChangeIPCommand extends Command {
     private void updateMainApp() {
         Platform.runLater(() -> {
             if (app.getServers().contains(server)) {
-                EditCommand editCmd = new EditCommand(app, server, server.getUserName(), server.getPassword(), server.getServerName(), newIPAddress);
+                int serverIndex = app.getServers().indexOf(server);
+                Server currServer = app.getServers().get(serverIndex);
+                EditCommand editCmd = new EditCommand(app, currServer, currServer.getUserName(), currServer.getPassword(), currServer.getServerName(), newIPAddress);
                 editCmd.execute();
             }
             app.addHistory(String.format(changeIPSuccessMessage, server.getServerName(), server.getIpAddress(), newIPAddress));

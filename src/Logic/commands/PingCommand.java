@@ -49,10 +49,9 @@ public class PingCommand extends Command {
                     continue;
                 }
                 int serverIndex = app.getServers().indexOf(server);
-                Server currServer = app.getServers().get(serverIndex);
-                if (server.isSame(currServer)) {
-                    app.getServers().set(serverIndex, server);
-                }
+                Server currServer = new Server(app.getServers().get(serverIndex));
+                currServer.setStatus(server.getIsOnline());
+                app.getServers().set(serverIndex, currServer);
             }
         });
     }
