@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class Parser {
     private static final String incorrectIPFormatMessage = "Please make sure that the ip address follows the format xxx.xxx.xxx.xxx";
-    private static final String invalidIPMessage = "Please make sure that the input ip address is made of integers (1-255) separated by '.'";
+    private static final String invalidIPMessage = "Please make sure that the input ip address is made of integers (0-255) separated by '.'";
     private static final String fileNotFoundMessage = "File cannot be found!";
     private static final String incorrectEntryMessage = "Please make sure that all required fields are filled!";
 
@@ -47,7 +47,7 @@ public class Parser {
                 if (tokensComma.length < 4 && tokensSemi.length < 4) {
                     throw new ParserException(incorrectEntryMessage);
                 }
-                String[] tokens = tokensComma.length == 4 ? tokensComma : tokensSemi;
+                String[] tokens = tokensComma.length >= 4 ? tokensComma : tokensSemi;
                 String ipAddress = parseIPAddress(tokens[3]);
                 tokens[3] = ipAddress;
                 serversToAdd.add(Arrays.asList(tokens));
