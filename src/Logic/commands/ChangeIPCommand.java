@@ -28,7 +28,7 @@ public class ChangeIPCommand extends Command {
         this.newIPAddress = newIPAddress;
     }
 
-    private void changeIP() {
+    private boolean changeIP() {
         try (PowerShell powerShell = PowerShell.openSession()) {
             EstablishConnectionCommand cmd = new EstablishConnectionCommand(powerShell, new ArrayList<>(app.getServers()), server, "s");
             cmd.execute();
@@ -38,11 +38,14 @@ public class ChangeIPCommand extends Command {
                 powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.declareAdapterVar("adapterIndex", "NIC1")));
                 powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.newIPCommand("adapterIndex", "newIPAddr")));
                 powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.removeIPCommand("adapterIndex", "oldIPAddr")));
+                return true;
             } else {
                 Platform.runLater(() -> app.addHistory(String.format(failedConnectionMessage, server.getServerName())));
+                return false;
             }
         } catch (PowerShellNotAvailableException ex) {
             Platform.runLater(()->app.addHistory(psUnavailableMessage));
+            return false;
         }
     }
 
@@ -66,15 +69,15 @@ public class ChangeIPCommand extends Command {
         }
     }
 
-    private void updateMainApp() {
+    private void updateMainApp(boolean cmdSuccess) {
         Platform.runLater(() -> {
-            if (app.getServers().contains(server)) {
+            if (cmdSuccess && app.getServers().contains(server)) {
                 int serverIndex = app.getServers().indexOf(server);
                 Server currServer = app.getServers().get(serverIndex);
                 EditCommand editCmd = new EditCommand(app, currServer, currServer.getUserName(), currServer.getPassword(), currServer.getServerName(), newIPAddress);
                 editCmd.execute();
+                app.addHistory(String.format(changeIPSuccessMessage, server.getServerName(), server.getIpAddress(), newIPAddress));
             }
-            app.addHistory(String.format(changeIPSuccessMessage, server.getServerName(), server.getIpAddress(), newIPAddress));
             app.removeServerInChange(server);
         });
     }
@@ -86,8 +89,8 @@ public class ChangeIPCommand extends Command {
             Task<Void> task = new Task<>() {
                 @Override
                 protected Void call() {
-                    changeIP();
-                    updateMainApp();
+                    boolean cmdSuccess = changeIP();
+                    updateMainApp(cmdSuccess);
                     return null;
                 }
             };

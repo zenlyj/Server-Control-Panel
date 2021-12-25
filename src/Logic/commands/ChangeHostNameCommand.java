@@ -48,30 +48,33 @@ public class ChangeHostNameCommand extends Command {
         }
     }
 
-    private void renameServer() {
+    private boolean renameServer() {
         try (PowerShell powerShell = PowerShell.openSession()) {
             EstablishConnectionCommand cmd = new EstablishConnectionCommand(powerShell, new ArrayList<>(app.getServers()), server, "s");
             cmd.execute();
             if (cmd.isSuccess()) {
                 powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.declareStringVar("newServerName", newServerName)));
                 powerShell.executeCommand(PSCommand.invokeCommand("s", PSCommand.renameCommand("newServerName")));
+                return true;
             } else {
                 Platform.runLater(() -> app.addHistory(String.format(failedConnectionMessage, server.getServerName())));
+                return false;
             }
         } catch (PowerShellNotAvailableException ex) {
             Platform.runLater(()->app.addHistory(psUnavailableMessage));
+            return false;
         }
     }
 
-    private void updateMainApp() {
+    private void updateMainApp(boolean cmdSuccess) {
         Platform.runLater(() -> {
-            if (app.getServers().contains(server)) {
+            if (cmdSuccess && app.getServers().contains(server)) {
                 int serverIndex = app.getServers().indexOf(server);
                 Server currServer = app.getServers().get(serverIndex);
                 EditCommand editCmd = new EditCommand(app, currServer, currServer.getUserName(), currServer.getPassword(), newServerName, currServer.getIpAddress());
                 editCmd.execute();
+                app.addHistory(String.format(changeNameSuccessMessage, server.getServerName(), newServerName));
             }
-            app.addHistory(String.format(changeNameSuccessMessage, server.getServerName(), newServerName));
             app.removeServerInChange(server);
         });
     }
@@ -83,8 +86,8 @@ public class ChangeHostNameCommand extends Command {
             Task<Void> task = new Task<>() {
                 @Override
                 protected Void call() {
-                    renameServer();
-                    updateMainApp();
+                    boolean cmdSuccess = renameServer();
+                    updateMainApp(cmdSuccess);
                     return null;
                 }
             };
